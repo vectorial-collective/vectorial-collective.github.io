@@ -122,7 +122,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
                         <div class="bg-slate-950/60 border border-slate-800/60 p-4 rounded-xl space-y-2">
                             <div class="flex justify-between text-xs font-mono">
-                                <span class="text-slate-400">Drag Coeff ($C_d$)</span>
+                                <span class="text-slate-400">Drag Coeff (C_d)</span>
                                 <span id="val-cd" class="text-cyan-400 font-bold">0.47</span>
                             </div>
                             <input type="range" id="input-cd" min="0.1" max="1.5" step="0.01" value="0.47" oninput="updateSimData()" class="w-full accent-cyan-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer">
@@ -130,7 +130,7 @@
 
                         <div class="bg-slate-950/60 border border-slate-800/60 p-4 rounded-xl space-y-2">
                             <div class="flex justify-between text-xs font-mono">
-                                <span class="text-slate-400">Mass ($m$) [kg]</span>
+                                <span class="text-slate-400">Mass (m) [kg]</span>
                                 <span id="val-mass" class="text-emerald-400 font-bold">75.0</span>
                             </div>
                             <input type="range" id="input-mass" min="1" max="500" step="1" value="75" oninput="updateSimData()" class="w-full accent-emerald-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer">
@@ -141,7 +141,7 @@
                     <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 flex items-center justify-between font-mono text-xs mb-6">
                         <div class="flex items-center gap-3">
                             <i class="fa-solid fa-gauge-high text-slate-500"></i>
-                            <span class="text-slate-400">Computed Terminal Velocity ($v_t$):</span>
+                            <span class="text-slate-400">Computed Terminal Velocity (v_t):</span>
                         </div>
                         <span id="output-vt" class="text-base font-bold text-emerald-400">55.24 m/s</span>
                     </div>
@@ -294,8 +294,9 @@
     <!-- Supabase & Interactive Script -->
     <script>
         const { createClient } = supabase;
-        const supabaseUrl = 'YOUR_SUPABASE_URL';
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        // Your actual project URL and public anon key:
+        const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
+        const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
         // Session Authentication Verification
@@ -328,10 +329,9 @@
             document.getElementById('val-cd').innerText = cd.toFixed(2);
             document.getElementById('val-mass').innerText = mass.toFixed(1);
 
-            // vt = sqrt((2 * m * g) / (rho * A * Cd))
             const g = 9.81;
-            const rho = 1.225; // Earth sea-level air density
-            const area = 0.7;  // Default reference cross-sectional area
+            const rho = 1.225;
+            const area = 0.7;
             
             const vt = Math.sqrt((2 * mass * g) / (rho * area * cd));
             document.getElementById('output-vt').innerText = vt.toFixed(2) + ' m/s';
@@ -340,7 +340,7 @@
         function loadPreset(type) {
             if (type === 'apollo') {
                 document.getElementById('input-cd').value = 1.05;
-                document.getElementById('input-mass').value = 450; // Scaled demo weight
+                document.getElementById('input-mass').value = 450;
             } else if (type === 'skydiver') {
                 document.getElementById('input-cd').value = 0.47;
                 document.getElementById('input-mass').value = 75;
@@ -348,12 +348,19 @@
             updateSimData();
         }
 
-        // Modal Controls
+        // Modal Controls & Guaranteed Sign Out
         function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
         function closeLogoutModal() { document.getElementById('logout-modal').classList.add('hidden'); }
+        
         async function confirmLogout() {
-            await _supabase.auth.signOut();
-            window.location.href = '/index.html';
+            try {
+                await _supabase.auth.signOut();
+            } catch (err) {
+                console.error('Sign out error:', err);
+            } finally {
+                // Guaranteed redirection back to landing page
+                window.location.href = '/index.html';
+            }
         }
 
         window.addEventListener('click', function(e) {
