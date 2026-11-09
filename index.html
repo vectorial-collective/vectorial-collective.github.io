@@ -675,13 +675,16 @@
         // GitHub OAuth Login function
         async function loginWithGitHub() {
             const { error } = await _supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: {
-                    redirectTo: 'https://vectorial-collective.github.io/dashboard.html'
-                }
-            });
-            if (error) console.error("Authentication error:", error);
+        provider: 'github',
+        options: {
+            redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
+            queryParams: {
+                prompt: 'select_account' // Forces GitHub to show the account picker / login prompt
+            }
         }
+    });
+    if (error) console.error('Error logging in:', error.message);
+}
 
         // Physics Vector Field Canvas
         const canvas = document.getElementById('physics-canvas');
