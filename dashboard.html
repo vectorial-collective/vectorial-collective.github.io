@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Vectorial Collective</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Nav -->
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-slate-800">
+            <h1 class="text-2xl font-bold tracking-tight">Member Dashboard</h1>
+            <button onclick="logout()" class="text-sm bg-red-950/50 text-red-400 border border-red-800/50 px-4 py-2 rounded-lg hover:bg-red-900/50 transition-all cursor-pointer">Sign Out</button>
+        </div>
+
+        <!-- Profile Overview Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 flex items-center gap-6 shadow-xl">
+            <img id="user-avatar" src="" alt="Avatar" class="w-20 h-20 rounded-full border-2 border-slate-700 bg-slate-800 object-cover">
+            <div>
+                <h2 id="user-name" class="text-xl font-semibold">Loading profile...</h2>
+                <p id="user-handle" class="text-slate-400 text-sm font-mono">@username</p>
+                <span class="inline-block mt-2 bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium">Active Contributor</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid Widgets -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="font-semibold text-lg mb-2 text-white">My Claimed Issues</h3>
+                <p class="text-slate-400 text-sm mb-4">Track issues you are currently working on across collective repositories.</p>
+                <div class="text-sm text-slate-500 italic bg-slate-950 p-4 rounded-xl border border-slate-800/50">No active issues claimed yet. Browse the backlog to pick one up!</div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="font-semibold text-lg mb-2 text-white">Simulation Presets</h3>
+                <p class="text-slate-400 text-sm mb-4">Saved parameters from your local physics simulator tests.</p>
+                <div class="text-sm text-slate-500 italic bg-slate-950 p-4 rounded-xl border border-slate-800/50">No saved presets stored in local cache.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const { createClient } = supabase;
+        const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
+        const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
+        const _supabase = createClient(supabaseUrl, supabaseKey);
+
+        async function checkSession() {
+            const { data: { session }, error } = await _supabase.auth.getSession();
+            if (error || !session) {
+                window.location.href = '/index.html';
+                return;
+            }
+            const user = session.user;
+            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name;
+            document.getElementById('user-handle').innerText = '@' + user.user_metadata.user_name;
+            document.getElementById('user-avatar').src = user.user_metadata.avatar_url;
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = '/index.html';
+        }
+
+        checkSession();
+    </script>
+</body>
+</html>
