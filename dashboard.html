@@ -2,82 +2,43 @@
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Dashboard | Vectorial Collective</title>
+    <title>Dashboard | Vectorial Collective</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-slate-950">
-
-    <!-- Sticky Navigation Header -->
-    <nav class="flex items-center justify-between px-6 md:px-12 py-5 border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
-        <a href="/index.html" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-400 text-sm">V</div>
-            <span class="font-bold text-base tracking-tight text-white">Vectorial Collective</span>
-        </a>
-        <div class="flex items-center gap-4">
-            <a href="/index.html" class="text-xs text-slate-400 hover:text-slate-200 transition-colors hidden sm:block">Public Site</a>
-            <button onclick="logout()" class="text-xs font-semibold bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-800/50 px-4 py-2 rounded-xl transition-all cursor-pointer">
-                Sign Out
-            </button>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Nav -->
+        <div class="flex justify-between items-center mb-8 pb-4 border-b border-slate-800">
+            <h1 class="text-2xl font-bold tracking-tight">Member Dashboard</h1>
+            <button onclick="logout()" class="text-sm bg-red-950/50 text-red-400 border border-red-800/50 px-4 py-2 rounded-lg hover:bg-red-900/50 transition-all cursor-pointer">Sign Out</button>
         </div>
-    </nav>
 
-    <!-- Main Workspace Container -->
-    <main class="max-w-5xl mx-auto px-6 py-10">
-
-        <!-- User Profile Hero Card -->
-        <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 md:p-8 mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-6 shadow-xl backdrop-blur">
-            <img id="user-avatar" src="https://via.placeholder.com/80" alt="Avatar" class="w-20 h-20 rounded-2xl border-2 border-slate-700 bg-slate-800 object-cover shadow-inner">
-            <div class="text-center sm:text-left flex-1">
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                    <h1 id="user-name" class="text-2xl font-bold text-white tracking-tight">Loading profile...</h1>
-                    <span class="inline-flex items-center gap-1.5 self-center sm:self-auto bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 text-xs px-3 py-1 rounded-full font-medium">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Contributor Session
-                    </span>
-                </div>
-                <p id="user-handle" class="text-slate-400 text-sm font-mono mt-1">@username</p>
-                <p id="user-id" class="text-slate-500 text-xs font-mono mt-2 truncate max-w-xs sm:max-w-md">UID: authenticating...</p>
+        <!-- Profile Overview Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8 flex items-center gap-6 shadow-xl">
+            <img id="user-avatar" src="" alt="Avatar" class="w-20 h-20 rounded-full border-2 border-slate-700 bg-slate-800 object-cover">
+            <div>
+                <h2 id="user-name" class="text-xl font-semibold">Loading profile...</h2>
+                <p id="user-handle" class="text-slate-400 text-sm font-mono">@username</p>
+                <span class="inline-block mt-2 bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-medium">Active Contributor</span>
             </div>
         </div>
 
-        <!-- Dashboard Workspace Grid -->
+        <!-- Dashboard Grid Widgets -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- Card 1: Claimed Repositories / Issues -->
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 shadow-lg hover:border-slate-700/80 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="font-semibold text-lg text-white flex items-center gap-2">
-                        <svg class="w-5 h-5 text-emerald-400 fill-current" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                        Claimed Workspace Issues
-                    </h2>
-                    <span class="text-xs font-mono bg-slate-800 text-slate-400 px-2.5 py-1 rounded-md">0 Active</span>
-                </div>
-                <p class="text-slate-400 text-sm mb-4">Track pull requests, assigned issues, and tasks across organization repositories.</p>
-                <div class="text-sm text-slate-500 italic bg-slate-950/80 p-4 rounded-xl border border-slate-800/60 text-center">
-                    No active issues claimed yet. Browse organizational repos to pick up a task!
-                </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="font-semibold text-lg mb-2 text-white">My Claimed Issues</h3>
+                <p class="text-slate-400 text-sm mb-4">Track issues you are currently working on across collective repositories.</p>
+                <div class="text-sm text-slate-500 italic bg-slate-950 p-4 rounded-xl border border-slate-800/50">No active issues claimed yet. Browse the backlog to pick one up!</div>
             </div>
-
-            <!-- Card 2: Saved Physics Sim Parameters -->
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 shadow-lg hover:border-slate-700/80 transition-all">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="font-semibold text-lg text-white flex items-center gap-2">
-                        <svg class="w-5 h-5 text-cyan-400 fill-none stroke-current" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
-                        Saved Physics Configurations
-                    </h2>
-                    <span class="text-xs font-mono bg-slate-800 text-slate-400 px-2.5 py-1 rounded-md">Local Presets</span>
-                </div>
-                <p class="text-slate-400 text-sm mb-4">Saved parameters from your atmospheric drag and trajectory simulation runs.</p>
-                <div class="text-sm text-slate-500 italic bg-slate-950/80 p-4 rounded-xl border border-slate-800/60 text-center">
-                    No saved simulation presets found in local session cache.
-                </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg">
+                <h3 class="font-semibold text-lg mb-2 text-white">Simulation Presets</h3>
+                <p class="text-slate-400 text-sm mb-4">Saved parameters from your local physics simulator tests.</p>
+                <div class="text-sm text-slate-500 italic bg-slate-950 p-4 rounded-xl border border-slate-800/50">No saved presets stored in local cache.</div>
             </div>
-
         </div>
-    </main>
+    </div>
 
-    <!-- Supabase Session Script -->
     <script>
         const { createClient } = supabase;
         const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
@@ -87,15 +48,13 @@
         async function checkSession() {
             const { data: { session }, error } = await _supabase.auth.getSession();
             if (error || !session) {
-                // Not authenticated -> kick back to home page
                 window.location.href = '/index.html';
                 return;
             }
             const user = session.user;
-            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
-            document.getElementById('user-handle').innerText = '@' + (user.user_metadata.user_name || 'user');
-            document.getElementById('user-avatar').src = user.user_metadata.avatar_url || 'https://via.placeholder.com/80';
-            document.getElementById('user-id').innerText = 'UID: ' + user.id;
+            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name;
+            document.getElementById('user-handle').innerText = '@' + user.user_metadata.user_name;
+            document.getElementById('user-avatar').src = user.user_metadata.avatar_url;
         }
 
         async function logout() {
