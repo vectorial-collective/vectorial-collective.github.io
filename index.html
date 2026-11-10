@@ -67,7 +67,6 @@
         }
     </script>
     <style>
-        /* Grid background pattern */
         .bg-grid-pattern {
             background-size: 40px 40px;
             background-image: 
@@ -115,8 +114,7 @@
 
             <!-- Action Buttons & Mobile Toggle -->
             <div class="flex items-center gap-3">
-                <!-- Sign in with GitHub Button -->
-                <button onclick="loginWithGitHub()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold px-3.5 py-1.5 rounded-lg text-xs transition-all shadow-md hover:border-blue-500/50">
+                <button onclick="loginWithGitHub()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold px-3.5 py-1.5 rounded-lg text-xs transition-all shadow-md hover:border-blue-500/50 cursor-pointer">
                     <svg class="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                     <span>Sign In</span>
                 </button>
@@ -127,11 +125,10 @@
                 </a>
                 <a href="https://discord.gg/7zuhEbVrF" target="_blank" rel="noopener noreferrer" 
                    class="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white px-3.5 sm:px-4 py-1.5 rounded-lg text-xs font-semibold shadow-lg shadow-[#5865F2]/25 hover:shadow-[#5865F2]/40 hover:-translate-y-0.5 transition-all">
-                    <!-- Discord icon -->
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
                     <span>Join #the-forge</span>
                 </a>
-                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-900 border border-slate-800">
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-1.5 text-slate-400 hover:text-white rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
             </div>
@@ -139,7 +136,7 @@
 
         <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-950/95 px-6 py-4 space-y-3 font-medium text-sm text-slate-300">
-            <button onclick="loginWithGitHub()" class="flex items-center gap-2 w-full py-2 text-blue-400 font-semibold border-b border-slate-800">
+            <button onclick="loginWithGitHub()" class="flex items-center gap-2 w-full py-2 text-blue-400 font-semibold border-b border-slate-800 cursor-pointer">
                 <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
                 <span>Sign in with GitHub</span>
             </button>
@@ -157,7 +154,6 @@
     <main class="relative z-10">
         <!-- Hero Section -->
         <section class="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center">
-            <!-- Status Badge -->
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-950/70 border border-blue-800/60 text-blue-300 mb-8 shadow-sm">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span>Active Sprint: Accepting Student Contributors</span>
@@ -165,7 +161,6 @@
                 <span class="text-slate-400">100% Open-Source</span>
             </div>
 
-            <!-- Main Heading -->
             <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6 text-white">
                 Computational Physics & <br class="hidden sm:block">
                 <span class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
@@ -177,7 +172,6 @@
                 A student-run collective engineering high-performance <span class="text-blue-300 font-semibold">C++</span> simulation kernels and verified <span class="text-blue-300 font-semibold">Python</span> tools. From bare-metal numerical integration to rapid mathematical modeling, we publish portfolio-grade open-source software.
             </p>
 
-            <!-- CTA Group -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                 <a href="https://github.com/vectorial-collective" target="_blank" rel="noopener noreferrer" 
                    class="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3 rounded-xl transition-all shadow-xl shadow-blue-600/30 hover:-translate-y-0.5">
@@ -233,7 +227,6 @@
             </div>
 
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-md shadow-2xl grid md:grid-cols-2 gap-8 items-center">
-                <!-- Controls -->
                 <div class="space-y-6">
                     <div>
                         <div class="flex justify-between text-sm font-medium mb-2">
@@ -241,10 +234,10 @@
                             <span id="planet-name" class="font-mono text-blue-400 font-bold">Earth</span>
                         </div>
                         <div class="grid grid-cols-4 gap-2">
-                            <button onclick="setBody('Moon', 7.342e22, 1737.4)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all">Moon</button>
-                            <button onclick="setBody('Mars', 6.417e23, 3389.5)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all">Mars</button>
-                            <button onclick="setBody('Earth', 5.972e24, 6371.0)" class="planet-btn active-planet py-2 text-xs font-mono rounded-lg bg-blue-600 text-white border border-blue-500 transition-all">Earth</button>
-                            <button onclick="setBody('Jupiter', 1.898e27, 69911.0)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all">Jupiter</button>
+                            <button onclick="setBody('Moon', 7.342e22, 1737.4)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer">Moon</button>
+                            <button onclick="setBody('Mars', 6.417e23, 3389.5)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer">Mars</button>
+                            <button onclick="setBody('Earth', 5.972e24, 6371.0)" class="planet-btn active-planet py-2 text-xs font-mono rounded-lg bg-blue-600 text-white border border-blue-500 transition-all cursor-pointer">Earth</button>
+                            <button onclick="setBody('Jupiter', 1.898e27, 69911.0)" class="planet-btn py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer">Jupiter</button>
                         </div>
                     </div>
 
@@ -288,20 +281,13 @@
                                     <stop offset="100%" stop-color="#ffffff" stop-opacity="1"/>
                                 </linearGradient>
                             </defs>
-                            <!-- Star field dots -->
                             <circle cx="20" cy="18" r="0.8" fill="rgba(255,255,255,0.4)"/>
                             <circle cx="140" cy="95" r="0.8" fill="rgba(255,255,255,0.4)"/>
                             <circle cx="135" cy="25" r="1.1" fill="rgba(255,255,255,0.6)"/>
                             
-                            <!-- Base Planet -->
                             <circle id="svg-planet" cx="50" cy="65" r="22" fill="url(#planet-glow)" stroke="#2563eb" stroke-width="1.5"/>
-                            
-                            <!-- Altitude Launch Perimeter (dashed) -->
                             <circle id="svg-altitude-ring" cx="50" cy="65" r="26" fill="none" stroke="rgba(192, 132, 252, 0.45)" stroke-width="1.2" stroke-dasharray="3 3"/>
-                            
-                            <!-- Escape Trajectory Hyperbolic Curve -->
                             <path id="svg-escape-path" d="M 50 39 C 82 39, 120 25, 145 10" fill="none" stroke="url(#escape-trail)" stroke-width="2.2" stroke-linecap="round"/>
-                            <!-- Trajectory arrowhead -->
                             <polygon id="svg-arrow" points="146,9 137,11 142,17" fill="#ffffff"/>
                         </svg>
                     </div>
@@ -334,7 +320,6 @@
             </div>
 
             <div class="grid gap-6">
-                <!-- Featured Active Project -->
                 <div class="group relative bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800 hover:border-blue-500/50 p-6 sm:p-8 rounded-2xl transition-all duration-300 shadow-lg flex flex-col justify-between">
                     <div>
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -369,7 +354,6 @@
                 </div>
             </div>
 
-            <!-- See all active projects CTA Banner -->
             <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-blue-950/60 via-slate-900/80 to-blue-950/60 border border-blue-800/40 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-xl">
                 <div class="flex items-center gap-4 text-center sm:text-left">
                     <div class="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 flex-shrink-0">
@@ -388,7 +372,7 @@
             </div>
         </section>
 
-        <!-- Quickstart / Terminal Snippet -->
+        <!-- Quickstart Terminal Snippet -->
         <section class="max-w-5xl mx-auto px-6 py-6">
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800/80">
@@ -398,13 +382,12 @@
                             <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
                             <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
                         </div>
-                        <!-- Language Tabs -->
                         <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800">
-                            <button id="tab-cpp" onclick="switchSnippet('cpp')" class="snippet-tab px-3 py-1 rounded-md text-xs font-mono font-medium bg-blue-600 text-white transition-all">C++ (CMake)</button>
-                            <button id="tab-py" onclick="switchSnippet('py')" class="snippet-tab px-3 py-1 rounded-md text-xs font-mono font-medium text-slate-400 hover:text-white transition-all">Python (venv)</button>
+                            <button id="tab-cpp" onclick="switchSnippet('cpp')" class="snippet-tab px-3 py-1 rounded-md text-xs font-mono font-medium bg-blue-600 text-white transition-all cursor-pointer">C++ (CMake)</button>
+                            <button id="tab-py" onclick="switchSnippet('py')" class="snippet-tab px-3 py-1 rounded-md text-xs font-mono font-medium text-slate-400 hover:text-white transition-all cursor-pointer">Python (venv)</button>
                         </div>
                     </div>
-                    <button id="copy-btn" onclick="copyActiveSnippet()" class="self-start sm:self-auto text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded transition-colors">
+                    <button id="copy-btn" onclick="copyActiveSnippet()" class="self-start sm:self-auto text-xs font-mono text-slate-400 hover:text-white flex items-center gap-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded transition-colors cursor-pointer">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
                         <span id="copy-text">Copy</span>
                     </button>
@@ -424,10 +407,9 @@
             </div>
         </section>
 
-        <!-- Contribution Pipeline: How It Works -->
+        <!-- Contribution Workflow -->
         <section id="workflow" class="max-w-6xl mx-auto px-6 py-12">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <!-- LEFT: HOW CONTRIBUTIONS WORK -->
                 <div>
                     <div class="text-center max-w-2xl mx-auto mb-10">
                         <span class="text-xs font-mono text-blue-400 uppercase tracking-wider bg-blue-950/50 px-3 py-1 rounded-full border border-blue-800/40">
@@ -442,40 +424,25 @@
                     </div>
 
                     <div class="grid grid-cols-1 gap-5">
-                        <!-- Step 1 -->
                         <div class="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl relative">
-                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center mb-4 border border-blue-500/30">
-                                01
-                            </div>
-                            <h3 class="font-bold text-lg text-white mb-2">
-                                Claim an Issue (C++ or Python)
-                            </h3>
+                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center mb-4 border border-blue-500/30">01</div>
+                            <h3 class="font-bold text-lg text-white mb-2">Claim an Issue (C++ or Python)</h3>
                             <p class="text-slate-400 text-sm leading-relaxed">
                                 Pick up a curated <code class="text-blue-300 bg-slate-800/80 px-1 py-0.5 rounded text-xs">good-first-issue</code> on GitHub. Whether you want to optimize cache locality and vectorization in C++ or implement physics algorithms in Python, we have tasks tailored for both tracks.
                             </p>
                         </div>
 
-                        <!-- Step 2 -->
                         <div class="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl relative">
-                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center mb-4 border border-blue-500/30">
-                                02
-                            </div>
-                            <h3 class="font-bold text-lg text-white mb-2">
-                                Live Pair-Programming
-                            </h3>
+                            <div class="w-8 h-8 rounded-lg bg-blue-600/20 text-blue-400 font-mono font-bold flex items-center justify-center mb-4 border border-blue-500/30">02</div>
+                            <h3 class="font-bold text-lg text-white mb-2">Live Pair-Programming</h3>
                             <p class="text-slate-400 text-sm leading-relaxed">
-                                Join our Discord channel <code class="text-blue-300 bg-slate-800/80 px-1 py-0.5 rounded text-xs">#the-forge</code> for CMake/compiler setups (clang++/g++), Python venvs, numerical precision checks, and automated GitHub CI feedback.
+                                Join our Discord channel <code class="text-blue-300 bg-slate-800/80 px-1 py-0.5 rounded text-xs">#the-forge</code> for CMake/compiler setups, Python venvs, numerical precision checks, and automated GitHub CI feedback.
                             </p>
                         </div>
 
-                        <!-- Step 3 -->
                         <div class="bg-slate-900/40 border border-slate-800/80 p-6 rounded-2xl relative">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 font-mono font-bold flex items-center justify-center mb-4 border border-emerald-500/30">
-                                03
-                            </div>
-                            <h3 class="font-bold text-lg text-white mb-2">
-                                Merge & Permanent Credit
-                            </h3>
+                            <div class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 font-mono font-bold flex items-center justify-center mb-4 border border-emerald-500/30">03</div>
+                            <h3 class="font-bold text-lg text-white mb-2">Merge & Permanent Credit</h3>
                             <p class="text-slate-400 text-sm leading-relaxed">
                                 Get your pull request merged with permanent co-author credit in tagged releases, commit manifests, and project documentation.
                             </p>
@@ -483,7 +450,6 @@
                     </div>
                 </div>
 
-                <!-- RIGHT: APPLY TO BE FEATURED -->
                 <div id="apply" class="relative overflow-hidden bg-slate-900/60 border border-blue-500/30 p-6 sm:p-8 rounded-2xl">
                     <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-600/10 blur-3xl rounded-full pointer-events-none"></div>
 
@@ -498,145 +464,69 @@
                             Have a project you're proud of? Apply to have it featured as an official Vectorial Collective organization repository and showcase your work to our community.
                         </p>
 
-                        <!-- Discord Recommendation -->
                         <div class="bg-[#5865F2]/10 border border-[#5865F2]/30 rounded-xl p-4 mb-7">
                             <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-[#818cf8]" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"/>
-                                </svg>
-                                <h3 class="text-white font-bold text-sm">
-                                    We recommend joining the Discord first!
-                                </h3>
+                                <svg class="w-5 h-5 text-[#818cf8]" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"/></svg>
+                                <h3 class="text-white font-bold text-sm">We recommend joining the Discord first!</h3>
                             </div>
                             <p class="text-slate-400 text-xs leading-relaxed mb-3">
                                 Get to know the community, ask questions, and learn more about the application process. The Discord is the heart of Vectorial Collective.
                             </p>
-                            <a href="https://discord.gg/7zuhEbVrF"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="inline-flex items-center gap-2 text-[#818cf8] hover:text-white text-sm font-bold transition-colors">
+                            <a href="https://discord.gg/7zuhEbVrF" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[#818cf8] hover:text-white text-sm font-bold transition-colors">
                                 Join Our Discord →
                             </a>
                         </div>
 
-                        <!-- Requirements -->
-                        <h3 class="text-white font-bold text-sm mb-4">
-                            Application Requirements
-                        </h3>
-
+                        <h3 class="text-white font-bold text-sm mb-4">Application Requirements</h3>
                         <div class="space-y-4 mb-7">
                             <div class="flex items-start gap-3">
                                 <span class="font-mono text-blue-400 text-xs mt-0.5">01</span>
-                                <div>
-                                    <p class="text-white text-sm font-semibold">MIT License</p>
-                                    <p class="text-slate-400 text-xs leading-relaxed">
-                                        Include an MIT LICENSE file in your repository.
-                                    </p>
-                                </div>
+                                <div><p class="text-white text-sm font-semibold">MIT License</p><p class="text-slate-400 text-xs leading-relaxed">Include an MIT LICENSE file in your repository.</p></div>
                             </div>
                             <div class="flex items-start gap-3">
                                 <span class="font-mono text-blue-400 text-xs mt-0.5">02</span>
-                                <div>
-                                    <p class="text-white text-sm font-semibold">One-Page Project Report</p>
-                                    <p class="text-slate-400 text-xs leading-relaxed">
-                                        Explain what your project does and why it matters.
-                                    </p>
-                                </div>
+                                <div><p class="text-white text-sm font-semibold">One-Page Project Report</p><p class="text-slate-400 text-xs leading-relaxed">Explain what your project does and why it matters.</p></div>
                             </div>
                             <div class="flex items-start gap-3">
                                 <span class="font-mono text-blue-400 text-xs mt-0.5">03</span>
-                                <div>
-                                    <p class="text-white text-sm font-semibold">Completed Project</p>
-                                    <p class="text-slate-400 text-xs leading-relaxed">
-                                        Your project must be tested and include a README and LICENSE.
-                                    </p>
-                                </div>
+                                <div><p class="text-white text-sm font-semibold">Completed Project</p><p class="text-slate-400 text-xs leading-relaxed">Your project must be tested and include a README and LICENSE.</p></div>
                             </div>
                             <div class="flex items-start gap-3">
                                 <span class="font-mono text-blue-400 text-xs mt-0.5">04</span>
-                                <div>
-                                    <p class="text-white text-sm font-semibold">Discord Application</p>
-                                    <p class="text-slate-400 text-xs leading-relaxed">
-                                        Complete the application in the #application channel.
-                                    </p>
-                                </div>
+                                <div><p class="text-white text-sm font-semibold">Discord Application</p><p class="text-slate-400 text-xs leading-relaxed">Complete the application in the #application channel.</p></div>
                             </div>
                         </div>
 
-                        <!-- Application Button -->
-                        <a href="https://forms.gle/k2c4VmBU4sBFL7Dt7"
-                           target="_blank"
-                           rel="noopener noreferrer"
+                        <a href="https://forms.gle/k2c4VmBU4sBFL7Dt7" target="_blank" rel="noopener noreferrer"
                            class="flex items-center justify-center gap-2 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm py-3.5 px-6 rounded-xl shadow-lg shadow-blue-600/20 transition-all hover:-translate-y-1">
                             Apply To Be Featured →
                         </a>
-
-                        <p class="text-slate-500 text-xs text-center mt-4">
-                            All submissions are subject to administrative approval.
-                        </p>
+                        <p class="text-slate-500 text-xs text-center mt-4">All submissions are subject to administrative approval.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contributor Benefits Bento Grid -->
+        <!-- Benefits Bento Grid -->
         <section id="benefits" class="max-w-5xl mx-auto px-6 py-12">
             <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-8 border-l-4 border-blue-500 pl-4">
                 Why Build With Vectorial Collective?
             </h2>
-
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="bg-slate-900/40 hover:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 transition-all">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">
-                        📜
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">📜</div>
                     <h3 class="font-bold text-white mb-2 text-base">Permanent Co-Authorship</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Every merged contribution explicitly credits your GitHub profile across release notes, Zenodo DOI citations, and project manifests.
-                    </p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Every merged contribution explicitly credits your GitHub profile across release notes, Zenodo DOI citations, and project manifests.</p>
                 </div>
-
                 <div class="bg-slate-900/40 hover:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 transition-all">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl mb-4">
-                        ⚡
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl mb-4">⚡</div>
                     <h3 class="font-bold text-white mb-2 text-base">Verified Proof-of-Work</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Showcase real engineering pull requests, unit tests, and numerical algorithms on college applications, research internships, and technical resumes.
-                    </p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Showcase real engineering pull requests, unit tests, and numerical algorithms on college applications, research internships, and technical resumes.</p>
                 </div>
-
                 <div class="bg-slate-900/40 hover:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 transition-all">
-                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">
-                        🛠️
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl mb-4">🛠️</div>
                     <h3 class="font-bold text-white mb-2 text-base">Live Build Sessions</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        Collaborate directly in <code class="text-blue-300 font-mono text-xs">#the-forge</code> with real-time GitHub webhook notifications, pair review sessions, and active maintainers.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Discord & Community Callout -->
-        <section class="max-w-5xl mx-auto px-6 py-12">
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-900/35 via-blue-900/30 to-indigo-900/35 border border-blue-500/30 p-8 sm:p-12 text-center backdrop-blur-md">
-                <div class="max-w-2xl mx-auto">
-                    <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">Ready to ship open-source simulations?</h2>
-                    <p class="text-slate-300 text-sm sm:text-base mb-8 leading-relaxed">
-                        Join our Discord to meet fellow math, physics, and software students. Ask questions, claim beginner-friendly issues, and start building.
-                    </p>
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="https://discord.gg/7zuhEbVrF" target="_blank" rel="noopener noreferrer" 
-                           class="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl shadow-lg shadow-blue-500/30 transition-all hover:-translate-y-0.5">
-                            <span>Join Discord Community</span>
-                            <span>→</span>
-                        </a>
-                        <a href="https://github.com/search?q=org%3Avectorial-collective+label%3A%22good+first+issue%22+is%3Aopen&type=issues" target="_blank" rel="noopener noreferrer" 
-                           class="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold px-8 py-3.5 rounded-xl transition-all">
-                            <span>Browse Good First Issues</span>
-                        </a>
-                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">Collaborate directly in <code class="text-blue-300 font-mono text-xs">#the-forge</code> with real-time GitHub webhook notifications, pair review sessions, and active maintainers.</p>
                 </div>
             </div>
         </section>
@@ -646,12 +536,10 @@
     <footer class="max-w-6xl mx-auto px-6 py-12 border-t border-slate-800/80 mt-12 text-slate-500 text-xs">
         <div class="flex flex-col md:flex-row items-center justify-between gap-6">
             <div class="flex items-center gap-3">
-                <img src="assets/logo.png" alt="Vectorial Collective Logo" 
-                     class="w-7 h-7 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
+                <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-7 h-7 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
                 <span class="text-slate-300 font-semibold">Vectorial Collective</span>
                 <span>— Open-source student simulation lab</span>
             </div>
-            
             <div class="flex items-center gap-6 font-medium">
                 <a href="https://github.com/vectorial-collective" target="_blank" class="hover:text-blue-300 transition-colors">GitHub</a>
                 <a href="https://discord.gg/7zuhEbVrF" target="_blank" class="hover:text-blue-300 transition-colors">Discord</a>
@@ -659,32 +547,26 @@
                 <a href="#" class="hover:text-blue-300 transition-colors">Back to Top ↑</a>
             </div>
         </div>
-        <div class="mt-8 text-center text-slate-600">
-            © 2026 Vectorial Collective. Licensed under the MIT License. Built by students, for students.
-        </div>
+        <div class="mt-8 text-center text-slate-600">© 2026 Vectorial Collective. Licensed under the MIT License. Built by students, for students.</div>
     </footer>
 
-    <!-- Interactive Simulation & Authentication Scripts -->
+    <!-- Scripts -->
     <script>
-        // Initialize Supabase Client (Replace with your actual keys from Supabase Dashboard)
         const { createClient } = supabase;
         const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
         const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // GitHub OAuth Login function
         async function loginWithGitHub() {
             const { error } = await _supabase.auth.signInWithOAuth({
-        provider: 'github',
-        options: {
-            redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
-            queryParams: {
-                prompt: 'select_account' // Forces GitHub to show the account picker / login prompt
-            }
+                provider: 'github',
+                options: {
+                    redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
+                    queryParams: { prompt: 'select_account' }
+                }
+            });
+            if (error) console.error('Error logging in:', error.message);
         }
-    });
-    if (error) console.error('Error logging in:', error.message);
-}
 
         // Physics Vector Field Canvas
         const canvas = document.getElementById('physics-canvas');
@@ -705,9 +587,7 @@
         }
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
@@ -727,13 +607,10 @@
                         this.vy += (dy / dist) * force;
                     }
                 }
-
                 this.vx *= 0.985;
                 this.vy *= 0.985;
-
                 this.x += this.vx;
                 this.y += this.vy;
-
                 if (this.x < 0) this.x = width;
                 if (this.x > width) this.x = 0;
                 if (this.y < 0) this.y = height;
@@ -744,51 +621,18 @@
                 ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
                 ctx.fillStyle = this.color;
                 ctx.fill();
-
-                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-                if (speed > 0.2) {
-                    ctx.beginPath();
-                    ctx.moveTo(this.x, this.y);
-                    ctx.lineTo(this.x + this.vx * 6, this.y + this.vy * 6);
-                    ctx.strokeStyle = 'rgba(216, 180, 254, 0.35)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-                }
             }
         }
 
         function initParticles() {
             particles = [];
             const count = Math.floor((width * height) / 3500);
-            for (let i = 0; i < Math.max(count, 45); i++) {
-                particles.push(new Particle());
-            }
+            for (let i = 0; i < Math.max(count, 45); i++) particles.push(new Particle());
         }
 
         function animateCanvas() {
             ctx.clearRect(0, 0, width, height);
-
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 65) {
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(168, 85, 247, ${0.18 * (1 - dist / 65)})`;
-                        ctx.lineWidth = 0.7;
-                        ctx.stroke();
-                    }
-                }
-            }
-
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateCanvas);
         }
 
@@ -799,38 +643,14 @@
             mouse.y = e.clientY - rect.top;
             mouse.isHover = true;
         });
-        canvas.addEventListener('mouseleave', () => {
-            mouse.isHover = false;
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                const rect = canvas.getBoundingClientRect();
-                mouse.x = e.touches[0].clientX - rect.left;
-                mouse.y = e.touches[0].clientY - rect.top;
-                mouse.isHover = true;
-            }
-        }, { passive: true });
-        canvas.addEventListener('touchend', () => {
-            mouse.isHover = false;
-        });
+        canvas.addEventListener('mouseleave', () => { mouse.isHover = false; });
 
-        // Initialize Canvas
-        window.addEventListener('DOMContentLoaded', () => {
-            resizeCanvas();
-            animateCanvas();
-        });
+        window.addEventListener('DOMContentLoaded', () => { resizeCanvas(); animateCanvas(); });
 
-        // Live Escape Velocity Calculator Logic
+        // Calculator Logic
         const G = 6.67430e-11;
         let currentMass = 5.972e24;
         let currentRadius = 6371.0;
-
-        const planetVisuals = {
-            'Moon': { core: '#cbd5e1', edge: '#475569', stroke: '#94a3b8', r: 14 },
-            'Mars': { core: '#f87171', edge: '#991b1b', stroke: '#ef4444', r: 18 },
-            'Earth': { core: '#93c5fd', edge: '#172554', stroke: '#2563eb', r: 22 },
-            'Jupiter': { core: '#fbbf24', edge: '#78350f', stroke: '#d97706', r: 28 }
-        };
         let currentPlanetName = 'Earth';
 
         function setBody(name, mass, radiusKm) {
@@ -840,34 +660,11 @@
             document.getElementById('planet-name').innerText = name;
             document.getElementById('val-mass').innerText = mass.toExponential(3) + ' kg';
             document.getElementById('val-radius').innerText = radiusKm.toLocaleString() + ' km';
-
-            const vis = planetVisuals[name] || planetVisuals['Earth'];
-            const coreEl = document.getElementById('planet-core-color');
-            const edgeEl = document.getElementById('planet-edge-color');
-            const planetCircle = document.getElementById('svg-planet');
-            if (coreEl && edgeEl && planetCircle) {
-                coreEl.setAttribute('stop-color', vis.core);
-                edgeEl.setAttribute('stop-color', vis.edge);
-                planetCircle.setAttribute('stroke', vis.stroke);
-                planetCircle.setAttribute('r', vis.r);
-            }
-
-            document.querySelectorAll('.planet-btn').forEach(btn => {
-                if (btn.innerText.trim() === name) {
-                    btn.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
-                    btn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
-                } else {
-                    btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
-                    btn.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
-                }
-            });
-
             updateCalculation();
         }
 
         const altSlider = document.getElementById('alt-slider');
         const altDisplay = document.getElementById('alt-display');
-
         altSlider.addEventListener('input', (e) => {
             altDisplay.innerText = Number(e.target.value).toLocaleString() + ' km';
             updateCalculation();
@@ -877,32 +674,14 @@
             const altitudeKm = parseFloat(altSlider.value);
             const rTotalMeters = (currentRadius + altitudeKm) * 1000;
             const vMps = Math.sqrt((2 * G * currentMass) / rTotalMeters);
-            const vKps = (vMps / 1000).toFixed(2);
-            const vKmph = Math.round(vMps * 3.6).toLocaleString();
-            const mach = (vMps / 343).toFixed(1);
-
-            document.getElementById('result-velocity').innerText = vKps;
-            document.getElementById('result-mach').innerText = `≈ Mach ${mach} • ${vKmph} km/h`;
-
-            const vis = planetVisuals[currentPlanetName] || planetVisuals['Earth'];
-            const altRing = document.getElementById('svg-altitude-ring');
-            const escapePath = document.getElementById('svg-escape-path');
-            if (altRing && escapePath) {
-                const altOffset = (altitudeKm / 10000) * 16;
-                const ringRadius = vis.r + 4 + altOffset;
-                altRing.setAttribute('r', ringRadius);
-                const launchY = 65 - ringRadius;
-                escapePath.setAttribute('d', `M 50 ${launchY} C 82 ${launchY}, 120 25, 145 10`);
-            }
+            document.getElementById('result-velocity').innerText = (vMps / 1000).toFixed(2);
+            document.getElementById('result-mach').innerText = `≈ Mach ${(vMps / 343).toFixed(1)} • ${Math.round(vMps * 3.6).toLocaleString()} km/h`;
         }
 
-        // Mobile Menu Toggle
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            if (menu) menu.classList.toggle('hidden');
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        // Snippet Switcher & Copy
         let activeSnippetLang = 'cpp';
         const snippets = {
             cpp: `git clone https://github.com/vectorial-collective/escape-velocity-calculator.git\ncd escape-velocity-calculator\ncmake -B build -S . -DCMAKE_BUILD_TYPE=Release\ncmake --build build && ./build/bin/sim`,
@@ -911,36 +690,19 @@
 
         function switchSnippet(lang) {
             activeSnippetLang = lang;
-            const tabCpp = document.getElementById('tab-cpp');
-            const tabPy = document.getElementById('tab-py');
-            const snipCpp = document.getElementById('snippet-cpp');
-            const snipPy = document.getElementById('snippet-py');
-
-            if (lang === 'cpp') {
-                tabCpp.classList.add('bg-blue-600', 'text-white');
-                tabCpp.classList.remove('text-slate-400');
-                tabPy.classList.remove('bg-blue-600', 'text-white');
-                tabPy.classList.add('text-slate-400');
-                snipCpp.classList.remove('hidden');
-                snipPy.classList.add('hidden');
-            } else {
-                tabPy.classList.add('bg-blue-600', 'text-white');
-                tabPy.classList.remove('text-slate-400');
-                tabCpp.classList.remove('bg-blue-600', 'text-white');
-                tabCpp.classList.add('text-slate-400');
-                snipPy.classList.remove('hidden');
-                snipCpp.classList.add('hidden');
-            }
+            document.getElementById('tab-cpp').classList.toggle('bg-blue-600', lang === 'cpp');
+            document.getElementById('tab-cpp').classList.toggle('text-white', lang === 'cpp');
+            document.getElementById('tab-py').classList.toggle('bg-blue-600', lang === 'py');
+            document.getElementById('tab-py').classList.toggle('text-white', lang === 'py');
+            document.getElementById('snippet-cpp').classList.toggle('hidden', lang !== 'cpp');
+            document.getElementById('snippet-py').classList.toggle('hidden', lang !== 'py');
         }
 
         function copyActiveSnippet() {
-            const code = snippets[activeSnippetLang];
-            navigator.clipboard.writeText(code).then(() => {
+            navigator.clipboard.writeText(snippets[activeSnippetLang]).then(() => {
                 const copyText = document.getElementById('copy-text');
                 copyText.innerText = 'Copied!';
-                setTimeout(() => {
-                    copyText.innerText = 'Copy';
-                }, 2000);
+                setTimeout(() => { copyText.innerText = 'Copy'; }, 2000);
             });
         }
     </script>
