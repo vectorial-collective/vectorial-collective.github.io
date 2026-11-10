@@ -123,25 +123,67 @@
             </div>
         </section>
 
-        <!-- Live In-Browser Simulator Section (#demo) -->
-        <section id="demo" class="max-w-4xl mx-auto px-6 py-12">
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur shadow-2xl">
+        <!-- Live In-Browser Escape Velocity Simulator Section (#demo) -->
+        <section id="demo" class="max-w-5xl mx-auto px-6 py-12">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur shadow-2xl">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
                     <div>
-                        <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Interactive Sandbox</span>
-                        <h2 class="text-xl font-bold text-white mt-1">Numerical Integration Kernel Preview</h2>
+                        <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Interactive Computational Kernel</span>
+                        <h2 class="text-xl font-bold text-white mt-1">Escape Velocity & Gravitational Simulator</h2>
+                        <p class="text-xs text-slate-400 mt-0.5 font-mono">Algorithm by Divyansh Kumar (dkum34743)</p>
                     </div>
                     <div class="flex items-center gap-2 font-mono text-xs bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span class="text-slate-300">Engine: Active</span>
+                        <span class="text-slate-300">G = 6.6743e-11 N·m²/kg²</span>
                     </div>
                 </div>
-                <div class="aspect-video bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center relative overflow-hidden group">
-                    <div class="absolute inset-0 bg-grid-pattern opacity-30"></div>
-                    <div class="text-center p-6 z-10">
-                        <i class="fa-solid fa-cube text-4xl text-blue-500 mb-3 animate-bounce"></i>
-                        <p class="text-sm font-mono text-slate-300">Simulation Viewport Ready</p>
-                        <p class="text-xs text-slate-500 mt-1">Connected to vectorial-collective core libraries</p>
+
+                <!-- Simulation Grid Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Controls Column -->
+                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-5 space-y-4 flex flex-col justify-between">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-400 mb-1.5">Planetary Mass Preset</label>
+                                <select id="mass-preset" onchange="updatePreset()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none cursor-pointer">
+                                    <option value="5.972e24">Earth (5.972 × 10²⁴ kg)</option>
+                                    <option value="7.342e22">Moon (7.342 × 10²² kg)</option>
+                                    <option value="6.4171e23">Mars (6.417 × 10²³ kg)</option>
+                                    <option value="1.8982e27">Jupiter (1.898 × 10²⁷ kg)</option>
+                                    <option value="custom">Custom Mass...</option>
+                                </select>
+                            </div>
+
+                            <div id="custom-mass-container" class="hidden">
+                                <label class="block text-xs font-mono text-slate-400 mb-1.5">Custom Mass (kg)</label>
+                                <input type="number" id="custom-mass-input" value="5.972e24" oninput="calculateEscapeVelocity()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-1.5">
+                                    <label class="text-xs font-mono text-slate-400">Center Distance (R)</label>
+                                    <span id="radius-val" class="text-xs font-mono text-blue-400 font-bold">6,371,000 m</span>
+                                </div>
+                                <input type="range" id="radius-slider" min="1000000" max="50000000" step="100000" value="6371000" oninput="calculateEscapeVelocity()" class="w-full accent-blue-600 bg-slate-900 cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Computed Telemetry Box -->
+                        <div class="bg-blue-950/40 border border-blue-800/50 rounded-xl p-4 text-center">
+                            <span class="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Computed Escape Velocity</span>
+                            <div id="result-display" class="text-2xl font-black font-mono text-white">11,186 m/s</div>
+                            <span id="result-kmh" class="text-[11px] font-mono text-slate-400 mt-1 block">40,268 km/h</span>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Visualization Column -->
+                    <div class="lg:col-span-2 bg-slate-950 rounded-xl border border-slate-800 flex flex-col items-center justify-center relative overflow-hidden p-4 aspect-video">
+                        <div class="absolute inset-0 bg-grid-pattern opacity-20"></div>
+                        <canvas id="sim-canvas" width="600" height="340" class="w-full h-full object-contain z-10"></canvas>
+                        <div class="absolute bottom-3 left-3 right-3 flex justify-between items-center text-[11px] font-mono text-slate-400 bg-slate-900/80 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-800 z-20">
+                            <span>Formula: $v_e = \sqrt{\frac{2GM}{R}}$</span>
+                            <span class="text-blue-400">Vectorial Physics Engine v2.4</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -210,9 +252,11 @@
                 <img src="assets/logo.png" alt="Logo" class="w-7 h-7 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
                 <span class="text-slate-300 font-semibold">Vectorial Collective</span>
             </div>
+            <span class="text-[11px] font-mono text-slate-400">Simulation Kernel by Divyansh Kumar (dkum34743)</span>
         </div>
     </footer>
 
+    <!-- Simulation Script -->
     <script>
         const { createClient } = supabase;
         const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
@@ -240,6 +284,92 @@
         }
 
         checkIndexSession();
+
+        // Simulator Logic (Based on Divyansh's Escape Velocity Python code)
+        function updatePreset() {
+            const preset = document.getElementById('mass-preset').value;
+            const customContainer = document.getElementById('custom-mass-container');
+            if (preset === 'custom') {
+                customContainer.classList.remove('hidden');
+            } else {
+                customContainer.classList.add('hidden');
+                document.getElementById('custom-mass-input').value = preset;
+            }
+            calculateEscapeVelocity();
+        }
+
+        function calculateEscapeVelocity() {
+            const G = 6.6743e-11;
+            const preset = document.getElementById('mass-preset').value;
+            let M = preset === 'custom' ? parseFloat(document.getElementById('custom-mass-input').value) : parseFloat(preset);
+            if (isNaN(M)) M = 5.972e24;
+
+            const R = parseFloat(document.getElementById('radius-slider').value);
+            document.getElementById('radius-val').innerText = R.toLocaleString() + ' m';
+
+            // Core formula: escape_velocity = int(((2*G*M)/R)**0.5)
+            const escapeVelocity = Math.round(Math.sqrt((2 * G * M) / R));
+            const kmh = Math.round(escapeVelocity * 3.6);
+
+            document.getElementById('result-display').innerText = escapeVelocity.toLocaleString() + ' m/s';
+            document.getElementById('result-kmh').innerText = kmh.toLocaleString() + ' km/h';
+
+            drawSimulation(R);
+        }
+
+        // Canvas Rendering
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d');
+        let angle = 0;
+
+        function drawSimulation(radius) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // Draw Planet Core
+            ctx.beginPath();
+            ctx.arc(cx, cy, 45, 0, Math.PI * 2);
+            const gradient = ctx.createRadialGradient(cx - 15, cy - 15, 5, cx, cy, 45);
+            gradient.addColorStop(0, '#60a5fa');
+            gradient.addColorStop(1, '#1d4ed8');
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#93c5fd';
+            ctx.stroke();
+
+            // Draw Orbit Ring representing distance R
+            const orbitRadius = 90 + ((radius - 1000000) / 49000000) * 50;
+            ctx.beginPath();
+            ctx.arc(cx, cy, orbitRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.25)';
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw orbiting spacecraft/probe
+            angle += 0.02;
+            const px = cx + Math.cos(angle) * orbitRadius;
+            const py = cy + Math.sin(angle) * orbitRadius;
+
+            ctx.beginPath();
+            ctx.arc(px, py, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#38bdf8';
+            ctx.shadowColor = '#38bdf8';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+
+        // Animation loop for canvas
+        function animate() {
+            const R = parseFloat(document.getElementById('radius-slider').value);
+            drawSimulation(R);
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
