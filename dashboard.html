@@ -275,7 +275,6 @@
                         { project_id: projectId, user_id: userId, role: appropriateRole, github_handle: githubHandle }
                     ]);
                 } else {
-                    // Update role and handle if already exists
                     await _supabase.from('project_members')
                         .update({ role: appropriateRole, github_handle: githubHandle })
                         .eq('project_id', projectId)
@@ -396,11 +395,12 @@
             if (projects && projects.length > 0) {
                 container.innerHTML = projects.map(p => {
                     const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${p.id}`;
+                    const repoLink = p.repo_url || '#';
                     return `
                         <div class="min-w-[290px] max-w-[320px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
                             <div>
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="font-mono text-xs text-blue-400 font-semibold truncate max-w-[170px]">${p.title}</span>
+                                    <a href="${repoLink}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold truncate max-w-[170px] hover:underline" title="${p.title}">${p.title}</a>
                                     <span class="text-[10px] font-mono ${p.role === 'Lead' ? 'bg-blue-950 text-blue-400 border border-blue-800' : 'bg-slate-900 text-slate-400'} px-2 py-0.5 rounded font-bold uppercase">${p.role}</span>
                                 </div>
                                 <p class="text-xs text-slate-400 mb-3 truncate">${p.repo_url || 'No repository URL provided.'}</p>
