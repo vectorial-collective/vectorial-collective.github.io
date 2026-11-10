@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="assets/logo.png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -25,16 +26,14 @@
     <!-- Top Command Header -->
     <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
         <a href="/index.html" class="flex items-center gap-3 group">
-            <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shadow-md group-hover:border-emerald-500/50 transition-colors">
-                <span class="font-bold text-emerald-400 font-mono text-sm">V</span>
-            </div>
+            <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-9 h-9 rounded-xl object-contain bg-black border border-blue-500/30 p-0.5 shadow-md group-hover:scale-105 transition-transform">
             <div class="flex flex-col">
                 <span class="font-bold text-sm tracking-tight text-white leading-none">Vectorial Collective</span>
                 <span class="text-[10px] font-mono text-slate-500 leading-none mt-1">OPERATOR DASHBOARD</span>
             </div>
         </a>
 
-        <!-- EST Clock -->
+        <!-- EST Time Telemetry -->
         <div class="hidden md:flex items-center gap-4 text-xs font-mono">
             <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -52,7 +51,7 @@
     <!-- Main Dashboard Body Grid -->
     <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-        <!-- LEFT COLUMN -->
+        <!-- LEFT COLUMN: Profile & Activity Log & Org Ecosystem -->
         <div class="lg:col-span-1 space-y-6">
             
             <!-- User Profile Card -->
@@ -86,7 +85,6 @@
                         <span class="text-slate-300"><i class="fa-brands fa-github mr-2"></i> GitHub Org</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
                     </a>
-                    <!-- Updated Discord Web Link -->
                     <a href="https://discord.gg/7zuhEbVrF" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
                         <span class="text-slate-300"><i class="fa-brands fa-discord mr-2 text-indigo-400"></i> #the-forge</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
@@ -96,7 +94,7 @@
 
         </div>
 
-        <!-- RIGHT COLUMN -->
+        <!-- RIGHT COLUMN: Projects & Org Tasks -->
         <div class="lg:col-span-3 space-y-6">
 
             <!-- Active Contributed Projects Section -->
@@ -108,6 +106,7 @@
                     </button>
                 </div>
 
+                <!-- Horizontal Scrollable Container -->
                 <div id="projects-container" class="flex gap-4 overflow-x-auto custom-scrollbar pb-3 pt-1">
                     <div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">
                         Loading projects...
@@ -153,8 +152,8 @@
                 </div>
             </div>
             <div class="flex gap-3 pt-2">
-                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Cancel</button>
-                <button onclick="saveNewProject()" class="w-1/2 bg-emerald-600 text-slate-950 text-xs font-bold py-2.5 rounded-xl shadow-lg">Create</button>
+                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Cancel</button>
+                <button onclick="saveNewProject()" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold py-2.5 rounded-xl shadow-lg cursor-pointer">Create</button>
             </div>
         </div>
     </div>
@@ -165,10 +164,10 @@
             <h3 id="manage-modal-title" class="text-lg font-bold text-white">Manage Project</h3>
             <p class="text-xs text-slate-400">Project collaborators and access controls.</p>
             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono">
-                Contributors: <span id="manage-contributors" class="text-emerald-400">Loading team...</span>
+                Contributors: <span id="manage-contributors" class="text-emerald-400">Primary Operator</span>
             </div>
             <div class="flex justify-end pt-2">
-                <button onclick="closeManageProjectModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl">Close</button>
+                <button onclick="closeManageProjectModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer">Close</button>
             </div>
         </div>
     </div>
@@ -179,8 +178,8 @@
             <h3 class="text-lg font-bold text-white mb-2">Sign Out</h3>
             <p class="text-sm text-slate-400 mb-6">Are you sure you want to sign out?</p>
             <div class="flex gap-3 justify-center">
-                <button onclick="closeLogoutModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Cancel</button>
-                <button onclick="confirmLogout()" class="w-1/2 bg-red-600 text-white text-xs font-semibold py-2.5 rounded-xl">Sign Out</button>
+                <button onclick="closeLogoutModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Cancel</button>
+                <button onclick="confirmLogout()" class="w-1/2 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Sign Out</button>
             </div>
         </div>
     </div>
@@ -194,10 +193,20 @@
         async function checkSession() {
             const { data: { session }, error } = await _supabase.auth.getSession();
             if (error || !session) {
-                window.location.href = '/index.html';
+                setTimeout(async () => {
+                    const { data: { session: retrySession } } = await _supabase.auth.getSession();
+                    if (!retrySession) {
+                        window.location.href = '/index.html';
+                    } else {
+                        renderUserDashboard(retrySession.user);
+                    }
+                }, 400);
                 return;
             }
-            const user = session.user;
+            renderUserDashboard(session.user);
+        }
+
+        function renderUserDashboard(user) {
             const fullName = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
             const githubHandle = user.user_metadata.user_name || 'user';
 
@@ -210,7 +219,6 @@
             fetchGitHubActivity(githubHandle);
         }
 
-        // Fetch live GitHub public contributions
         async function fetchGitHubActivity(username) {
             const container = document.getElementById('activity-log-container');
             try {
@@ -239,7 +247,6 @@
             }
         }
 
-        // Live EST Clock
         function updateESTClock() {
             const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
             document.getElementById('est-clock').innerText = new Intl.DateTimeFormat('en-US', options).format(new Date()) + ' EST';
@@ -247,7 +254,6 @@
         setInterval(updateESTClock, 1000);
         updateESTClock();
 
-        // Project Modals
         function openCreateProjectModal() { document.getElementById('create-project-modal').classList.remove('hidden'); }
         function closeCreateProjectModal() { document.getElementById('create-project-modal').classList.add('hidden'); }
 
@@ -300,7 +306,6 @@
 
         function openManageProjectModal(projectTitle) {
             document.getElementById('manage-modal-title').innerText = 'Manage: ' + projectTitle;
-            document.getElementById('manage-contributors').innerText = 'Owner (Primary Operator)';
             document.getElementById('manage-project-modal').classList.remove('hidden');
         }
         function closeManageProjectModal() { document.getElementById('manage-project-modal').classList.add('hidden'); }
@@ -308,8 +313,13 @@
         function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
         function closeLogoutModal() { document.getElementById('logout-modal').classList.add('hidden'); }
         async function confirmLogout() {
-            await _supabase.auth.signOut();
-            window.location.href = '/index.html';
+            try {
+                await _supabase.auth.signOut();
+            } catch (err) {
+                console.error(err);
+            } finally {
+                window.location.href = '/index.html';
+            }
         }
 
         checkSession();
