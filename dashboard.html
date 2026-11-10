@@ -1,557 +1,312 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Dashboard | Vectorial Collective</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="assets/logo.png">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .font-mono { font-family: 'JetBrains+Mono', monospace; }
-        .grid-pattern {
-            background-image: radial-gradient(rgba(51, 65, 85, 0.2) 1px, transparent 1px);
-            background-size: 24px 24px;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
         }
-        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
-    </style>
+    </script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-600 selection:text-white grid-pattern flex flex-col">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col justify-between">
 
-    <!-- Top Command Header -->
-    <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
-        <a href="/index.html" class="flex items-center gap-3 group">
-            <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-9 h-9 rounded-xl object-contain bg-black border border-blue-500/30 p-0.5 shadow-md group-hover:scale-105 transition-transform">
-            <div class="flex flex-col">
-                <span class="font-bold text-sm tracking-tight text-white leading-none">Vectorial Collective</span>
-                <span class="text-[10px] font-mono text-slate-500 leading-none mt-1">OPERATOR DASHBOARD</span>
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-10 h-10 rounded-xl object-contain bg-black border border-blue-500/30 p-1 group-hover:scale-105 transition-transform">
+                <div class="flex flex-col">
+                    <span class="text-base font-extrabold tracking-wider bg-gradient-to-r from-blue-400 via-sky-300 to-white bg-clip-text text-transparent">VECTORIAL</span>
+                    <span class="text-[10px] tracking-widest text-slate-400 font-mono -mt-1 uppercase">Collective Dashboard</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-4">
+                <div id="user-profile" class="flex items-center gap-2.5 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5">
+                    <img id="user-avatar" src="https://github.com/identicons/user.png" class="w-6 h-6 rounded-full border border-blue-500/40">
+                    <span id="user-name" class="text-xs font-mono font-semibold text-slate-200">Operator</span>
+                </div>
+                <button onclick="signOut()" class="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-rose-400 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono transition-colors">
+                    Sign Out
+                </button>
             </div>
-        </a>
-
-        <!-- EST Time Telemetry -->
-        <div class="hidden md:flex items-center gap-4 text-xs font-mono">
-            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
-                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                <span class="text-slate-400">EST Time:</span>
-                <span id="est-clock" class="text-slate-200 font-semibold">00:00:00 EST</span>
-            </div>
-        </div>
-
-        <button onclick="openLogoutModal()" class="text-xs font-semibold bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-800/50 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-2">
-            <i class="fa-solid fa-power-off text-xs"></i>
-            <span>Sign Out</span>
-        </button>
+        </nav>
     </header>
 
-    <!-- Main Dashboard Body Grid -->
-    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
+        
+        <!-- Dashboard Header Telemetry -->
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-white">Member Workspace & Telemetry</h1>
+                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collective repositories, track team activity, and monitor GitHub issue pipelines.</p>
+            </div>
+            <a href="submit.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Submit New Project</span>
+            </a>
+        </div>
 
-        <!-- LEFT COLUMN: Profile & Activity Log & Org Ecosystem -->
-        <div class="lg:col-span-1 space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <!-- User Profile Card -->
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl flex flex-col items-center text-center">
-                <img id="user-avatar" src="https://via.placeholder.com/80" alt="User pfp" class="w-20 h-20 rounded-2xl border-2 border-slate-700 bg-slate-800 object-cover shadow-inner mb-3">
-                <h1 id="user-name" class="font-bold text-white text-base tracking-tight">Initializing...</h1>
-                <p id="user-handle" class="text-slate-400 text-xs font-mono mt-0.5">@githubhandle</p>
-                <p id="user-id" class="text-slate-500 text-[10px] font-mono mt-1 truncate w-full">UID: loading...</p>
-            </div>
-
-            <!-- My Activity Log Card -->
-            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl flex flex-col">
-                <h2 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
-                    <span>My Activity Log:</span>
-                    <i class="fa-solid fa-clock-rotate-left text-xs text-slate-500"></i>
-                </h2>
-                <p class="text-[11px] text-slate-400 mb-3">Past contributions tracked on GitHub:</p>
+            <!-- Left Column: Repositories & Org Issues -->
+            <div class="lg:col-span-2 space-y-8">
                 
-                <div id="activity-log-container" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1 text-xs font-mono">
-                    <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">
-                        Fetching GitHub events...
+                <!-- My Projects Section -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-blue-400"></i>
+                            <span>My Projects & Collaborations</span>
+                        </h2>
+                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded-full">Supabase Sync</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Org Ecosystem Links -->
-            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl">
-                <h3 class="font-bold text-xs text-slate-400 uppercase tracking-wider font-mono mb-3">Org Ecosystem</h3>
-                <div class="space-y-2 text-xs">
-                    <a href="https://github.com/vectorial-collective" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
-                        <span class="text-slate-300"><i class="fa-brands fa-github mr-2"></i> GitHub Org</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
-                    </a>
-                    <a href="https://discord.gg/7zuhEbVrF" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
-                        <span class="text-slate-300"><i class="fa-brands fa-discord mr-2 text-indigo-400"></i> #the-forge</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- RIGHT COLUMN: Projects & Org Tasks -->
-        <div class="lg:col-span-3 space-y-6">
-
-            <!-- Active Contributed Projects Section -->
-            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
-                    <h2 class="font-bold text-base text-white">My active contributed projects:</h2>
-                    <button onclick="openCreateProjectModal()" class="text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-2">
-                        <i class="fa-solid fa-plus text-xs"></i> Create Project
-                    </button>
-                </div>
-
-                <!-- Horizontal Scrollable Container -->
-                <div id="projects-container" class="flex gap-4 overflow-x-auto custom-scrollbar pb-3 pt-1">
-                    <div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">
-                        Loading projects...
-                    </div>
-                </div>
-            </div>
-
-            <!-- Org Tasks and Issues Section -->
-            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
-                    <h2 class="font-bold text-base text-white">Org tasks and issues:</h2>
-                    <span class="text-xs font-mono text-slate-500">Auto-synced</span>
-                </div>
-
-                <div id="org-tasks-container" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-                    <div class="p-4 bg-slate-950/60 border border-slate-800/60 rounded-xl flex items-center justify-between text-xs">
-                        <div class="flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-                            <span class="font-mono text-slate-400">#018</span>
-                            <span class="font-medium text-slate-200">Integrate dynamic GitHub activity logs and project management modal</span>
+                    <div id="user-projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Fetching project records...
                         </div>
-                        <span class="font-mono text-[10px] bg-blue-950 text-blue-400 border border-blue-800 px-2.5 py-1 rounded-md">IN PROGRESS</span>
+                    </div>
+                </div>
+
+                <!-- Org Tasks & Issues Section -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800/80">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-circle-dot text-emerald-400"></i>
+                                <span>Org Tasks & Issues</span>
+                            </h2>
+                            <p class="text-[11px] text-slate-400 font-mono mt-0.5">Track collective tasks or inspect assigned issues</p>
+                        </div>
+                        
+                        <!-- Dynamic Filter Buttons -->
+                        <div class="flex items-center gap-2">
+                            <button id="btn-all-issues" onclick="filterIssues('all')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold">
+                                All Org Issues
+                            </button>
+                            <button id="btn-my-issues" onclick="filterIssues('my')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800">
+                                <i class="fa-solid fa-user-tag text-[10px] mr-1"></i>My Issues
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Issues Content Grid -->
+                    <div id="issues-list" class="space-y-3">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Loading issue tracker...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Real-Time Activity Log -->
+            <div class="space-y-8">
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-400"></i>
+                            <span>Real-Time Activity Log</span>
+                        </h2>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    </div>
+
+                    <div id="activity-log-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Connecting telemetry...
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-
     </main>
 
-    <!-- Create Project Modal -->
-    <div id="create-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
-            <h3 class="text-lg font-bold text-white">Create New Project</h3>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Project Name</label>
-                    <input type="text" id="new-project-title" placeholder="e.g. telemetry-engine" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Repository URL</label>
-                    <input type="text" id="new-project-url" placeholder="https://github.com/vectorial-collective/repo" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-blue-500 outline-none">
-                </div>
-            </div>
-            <div class="flex gap-3 pt-2">
-                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Cancel</button>
-                <button onclick="saveNewProject()" class="w-1/2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-xl shadow-lg cursor-pointer">Create</button>
-            </div>
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-800/80 text-slate-500 text-xs w-full flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="assets/logo.png" alt="Logo" class="w-6 h-6 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
+            <span class="text-slate-400 font-semibold">Vectorial Collective Dashboard</span>
         </div>
-    </div>
+        <span class="font-mono text-[11px]">Copyright &copy; Vectorial Collective 2026</span>
+    </footer>
 
-    <!-- Manage Project & Team Roster Modal -->
-    <div id="manage-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
-            <h3 id="manage-modal-title" class="text-lg font-bold text-white">Manage Project</h3>
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Share Link for Contributors</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="share-link-input" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 outline-none">
-                        <button onclick="copyShareLinkFromModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all flex-shrink-0 cursor-pointer">
-                            Copy
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Contributors & Team Roster (Click Transfer to promote)</label>
-                    <div id="manage-contributors-list" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono space-y-2 max-h-44 overflow-y-auto custom-scrollbar">
-                        Loading team members...
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-between pt-3 border-t border-slate-800">
-                <button id="delete-project-btn" onclick="" class="bg-red-950/60 hover:bg-red-900/80 text-red-400 border border-red-800/50 text-xs font-semibold px-4 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5">
-                    <i class="fa-solid fa-trash text-xs"></i> Delete Project
-                </button>
-                <button onclick="closeManageProjectModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sign Out Modal -->
-    <div id="logout-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
-            <h3 class="text-lg font-bold text-white mb-2">Sign Out</h3>
-            <p class="text-sm text-slate-400 mb-6">Are you sure you want to sign out?</p>
-            <div class="flex gap-3 justify-center">
-                <button onclick="closeLogoutModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Cancel</button>
-                <button onclick="confirmLogout()" class="w-1/2 bg-red-600 hover:bg-red-500 text-white text-xs font-semibold py-2.5 rounded-xl cursor-pointer">Sign Out</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- Dashboard State & Issue Handling Logic -->
     <script>
         const { createClient } = supabase;
-        const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
-        const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
-        const _supabase = createClient(supabaseUrl, supabaseKey);
-        let currentUserGlobal = null;
+        const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
 
-        async function checkSession() {
-            const { data: { session }, error } = await _supabase.auth.getSession();
-            if (error || !session) {
-                setTimeout(async () => {
-                    const { data: { session: retrySession } } = await _supabase.auth.getSession();
-                    if (!retrySession) {
-                        window.location.href = '/index.html';
-                    } else {
-                        currentUserGlobal = retrySession.user;
-                        handleAuthSuccess(retrySession.user);
-                    }
-                }, 400);
+        let currentUser = null;
+        let currentFilter = 'all';
+
+        // Sample state for Org Issues
+        let orgIssues = [
+            {
+                id: 101,
+                title: "Optimize C++ RK4 numerical integration loop",
+                repo: "escape-velocity-calculator",
+                author: "dkum34743",
+                status: "Open",
+                url: "https://github.com/vectorial-collective/escape-velocity-calculator/issues"
+            }
+        ];
+
+        async function initDashboard() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'index.html';
                 return;
             }
-            currentUserGlobal = session.user;
-            handleAuthSuccess(session.user);
+
+            currentUser = session.user;
+            const githubHandle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            const avatarUrl = currentUser.user_metadata.avatar_url || 'https://github.com/identicons/user.png';
+
+            document.getElementById('user-name').innerText = githubHandle;
+            document.getElementById('user-avatar').src = avatarUrl;
+
+            loadUserProjects();
+            renderIssues();
+            loadActivityLogs();
         }
 
-        async function handleAuthSuccess(user) {
-            renderUserDashboard(user);
+        async function loadUserProjects() {
+            const container = document.getElementById('user-projects-list');
+            const { data: projects, error } = await _supabase.from('projects').select('*');
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const joinProjectId = urlParams.get('join_project');
-            if (joinProjectId) {
-                await autoJoinProject(joinProjectId, user);
-            }
-        }
-
-        function renderUserDashboard(user) {
-            const fullName = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
-            const githubHandle = user.user_metadata.user_name || 'user';
-
-            document.getElementById('user-name').innerText = fullName;
-            document.getElementById('user-handle').innerText = '@' + githubHandle;
-            document.getElementById('user-avatar').src = user.user_metadata.avatar_url || 'https://via.placeholder.com/80';
-            document.getElementById('user-id').innerText = 'UID: ' + user.id;
-
-            loadUserProjects(user.id);
-            fetchGitHubActivity(githubHandle);
-        }
-
-        async function autoJoinProject(projectId, user) {
-            try {
-                const userId = user.id;
-                const githubHandle = user.user_metadata.user_name || 'contributor';
-
-                const { data: project } = await _supabase
-                    .from('projects')
-                    .select('created_by')
-                    .eq('id', projectId)
-                    .maybeSingle();
-
-                if (!project) return;
-
-                const appropriateRole = (project.created_by === userId) ? 'Lead' : 'Contributor';
-
-                const { data: existingMember } = await _supabase
-                    .from('project_members')
-                    .select('*')
-                    .eq('project_id', projectId)
-                    .eq('user_id', userId)
-                    .maybeSingle();
-
-                if (!existingMember) {
-                    await _supabase.from('project_members').insert([
-                        { project_id: projectId, user_id: userId, role: appropriateRole, github_handle: githubHandle }
-                    ]);
-                } else {
-                    await _supabase.from('project_members')
-                        .update({ role: appropriateRole, github_handle: githubHandle })
-                        .eq('project_id', projectId)
-                        .eq('user_id', userId);
-                }
-                
-                const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
-                
-                loadUserProjects(userId);
-            } catch (err) {
-                console.error("Auto-join error:", err);
-            }
-        }
-
-        async function fetchGitHubActivity(username) {
-            const container = document.getElementById('activity-log-container');
-            try {
-                const res = await fetch(`https://api.github.com/users/${username}/events/public?per_page=5`);
-                if (!res.ok) throw new Error('Failed to fetch events');
-                const events = await res.json();
-
-                if (events.length === 0) {
-                    container.innerHTML = `<div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">No recent public GitHub activity found.</div>`;
-                    return;
-                }
-
-                container.innerHTML = events.slice(0, 5).map(ev => {
-                    const repoName = ev.repo.name;
-                    const eventType = ev.type.replace('Event', '');
-                    return `
-                        <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl flex flex-col gap-1">
-                            <span class="text-blue-400 font-semibold">${eventType}</span>
-                            <span class="text-slate-300 truncate">${repoName}</span>
-                            <span class="text-[10px] text-slate-500">${new Date(ev.created_at).toLocaleDateString()}</span>
-                        </div>
-                    `;
-                }).join('');
-            } catch (err) {
-                container.innerHTML = `<div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">Activity sync unavailable.</div>`;
-            }
-        }
-
-        function updateESTClock() {
-            const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            document.getElementById('est-clock').innerText = new Intl.DateTimeFormat('en-US', options).format(new Date()) + ' EST';
-        }
-        setInterval(updateESTClock, 1000);
-        updateESTClock();
-
-        function openCreateProjectModal() { document.getElementById('create-project-modal').classList.remove('hidden'); }
-        function closeCreateProjectModal() { document.getElementById('create-project-modal').classList.add('hidden'); }
-
-        async function saveNewProject() {
-            const title = document.getElementById('new-project-title').value;
-            const repo_url = document.getElementById('new-project-url').value;
-            const { data: { session } } = await _supabase.auth.getSession();
-            
-            if (!title || !session) return;
-
-            const user = session.user;
-            const githubHandle = user.user_metadata.user_name || 'operator';
-
-            const { data: newProj, error } = await _supabase.from('projects').insert([
-                { title, repo_url, created_by: user.id }
-            ]).select().single();
-
-            if (!error && newProj) {
-                await _supabase.from('project_members').insert([
-                    { project_id: newProj.id, user_id: user.id, role: 'Lead', github_handle: githubHandle }
-                ]);
-
-                closeCreateProjectModal();
-                loadUserProjects(user.id);
-                document.getElementById('new-project-title').value = '';
-                document.getElementById('new-project-url').value = '';
-            } else {
-                alert('Error creating project: ' + (error ? error.message : 'Unknown error'));
-            }
-        }
-
-        async function loadUserProjects(userId) {
-            const { data: createdProjects } = await _supabase
-                .from('projects')
-                .select('*')
-                .eq('created_by', userId);
-
-            const { data: memberEntries } = await _supabase
-                .from('project_members')
-                .select('project_id, role')
-                .eq('user_id', userId);
-
-            let projectMap = new Map();
-
-            if (createdProjects) {
-                createdProjects.forEach(p => projectMap.set(p.id, { ...p, role: 'Lead' }));
-            }
-
-            if (memberEntries && memberEntries.length > 0) {
-                const memberProjectIds = memberEntries.map(m => m.project_id);
-                const { data: joinedProjects } = await _supabase
-                    .from('projects')
-                    .select('*')
-                    .in('id', memberProjectIds);
-
-                if (joinedProjects) {
-                    joinedProjects.forEach(p => {
-                        const entry = memberEntries.find(m => m.project_id === p.id);
-                        const assignedRole = (p.created_by === userId) ? 'Lead' : (entry ? entry.role : 'Contributor');
-                        projectMap.set(p.id, { ...p, role: assignedRole });
-                    });
-                }
-            }
-
-            const projects = Array.from(projectMap.values());
-            const container = document.getElementById('projects-container');
-            
             if (projects && projects.length > 0) {
-                container.innerHTML = projects.map(p => {
-                    const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${p.id}`;
-                    const repoLink = p.repo_url || '#';
-                    
-                    // Only display the Manage button if user role is 'Lead'
-                    const manageButtonHtml = (p.role === 'Lead') ? `
-                        <button onclick="openManageProjectModal('${p.id}', '${p.title}', '${p.created_by}')" class="text-blue-400 hover:underline cursor-pointer">Manage &rarr;</button>
-                    ` : `<span class="text-[11px] text-slate-500 font-mono">Contributor View</span>`;
-
-                    return `
-                        <div class="min-w-[290px] max-w-[320px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
-                            <div>
-                                <div class="flex items-center justify-between mb-2">
-                                    <a href="${repoLink}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold truncate max-w-[170px] hover:underline" title="${p.title}">${p.title}</a>
-                                    <span class="text-[10px] font-mono ${p.role === 'Lead' ? 'bg-blue-950 text-blue-400 border border-blue-800' : 'bg-slate-900 text-slate-400'} px-2 py-0.5 rounded font-bold uppercase">${p.role}</span>
-                                </div>
-                                <p class="text-xs text-slate-400 mb-3 truncate">${p.repo_url || 'No repository URL provided.'}</p>
+                container.innerHTML = projects.map(p => `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <a href="${p.repo_url || '#'}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold hover:underline truncate max-w-[180px]">${p.title}</a>
+                                <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">Lead</span>
                             </div>
-                            <div class="space-y-2 pt-2 border-t border-slate-900 text-xs">
-                                <div class="flex items-center justify-between">
-                                    <button onclick="copyProjectShareLink('${shareUrl}')" class="text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer">
-                                        <i class="fa-solid fa-link text-[10px]"></i> Share Link
-                                    </button>
-                                    ${manageButtonHtml}
-                                </div>
-                            </div>
+                            <p class="text-[11px] text-slate-400 truncate">${p.repo_url || 'No URL specified'}</p>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `).join('');
             } else {
-                container.innerHTML = `<div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">No active projects yet. Click "Create Project".</div>`;
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-400 col-span-2">
+                        No projects found. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
+                    </div>
+                `;
             }
         }
 
-        function copyProjectShareLink(url) {
-            navigator.clipboard.writeText(url).then(() => {
-                alert("Share link copied to clipboard! Share it with contributors so they can join your project.");
-            });
+        function filterIssues(mode) {
+            currentFilter = mode;
+            const btnAll = document.getElementById('btn-all-issues');
+            const btnMy = document.getElementById('btn-my-issues');
+
+            if (mode === 'all') {
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+            } else {
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+            }
+
+            renderIssues();
         }
 
-        async function openManageProjectModal(projectId, projectTitle, projectCreatedBy) {
-            document.getElementById('manage-modal-title').innerText = 'Manage: ' + projectTitle;
-            const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${projectId}`;
-            document.getElementById('share-link-input').value = shareUrl;
+        function renderIssues() {
+            const container = document.getElementById('issues-list');
+            const handle = currentUser ? (currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name) : '';
 
-            document.getElementById('delete-project-btn').setAttribute('onclick', `deleteProject('${projectId}')`);
+            let filtered = orgIssues;
+            if (currentFilter === 'my') {
+                filtered = orgIssues.filter(i => i.author.toLowerCase() === (handle || '').toLowerCase());
+            }
 
-            const { data: members } = await _supabase
-                .from('project_members')
-                .select('*')
-                .eq('project_id', projectId);
-
-            const isCurrentLead = (currentUserGlobal && currentUserGlobal.id === projectCreatedBy);
-
-            const rosterContainer = document.getElementById('manage-contributors-list');
-            if (members && members.length > 0) {
-                rosterContainer.innerHTML = members.map(m => {
-                    const isSelf = (currentUserGlobal && currentUserGlobal.id === m.user_id);
-                    const canTransferToThisUser = (isCurrentLead && !isSelf && m.role !== 'Lead');
-
-                    return `
-                        <div class="flex items-center justify-between py-1.5 border-b border-slate-900 last:border-0">
+            if (filtered.length > 0) {
+                container.innerHTML = filtered.map(issue => `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                        <div>
                             <div class="flex items-center gap-2">
-                                <span class="text-slate-300">@${m.github_handle || 'user'}</span>
-                                <span class="text-[9px] uppercase ${m.role === 'Lead' ? 'text-blue-400 font-bold' : 'text-slate-400'}">${m.role}</span>
+                                <span class="text-xs font-bold text-white hover:text-blue-400 transition-colors">${issue.title}</span>
+                                <span class="text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-2 py-0.5 rounded-full">${issue.status}</span>
                             </div>
-                            <div>
-                                ${canTransferToThisUser ? `
-                                    <button onclick="transferLead('${projectId}', '${m.user_id}', '${m.github_handle}')" class="bg-blue-950/80 hover:bg-blue-900 text-blue-400 border border-blue-800/60 text-[10px] px-2.5 py-1 rounded-lg transition-all cursor-pointer">
-                                        Transfer Lead
-                                    </button>
-                                ` : ''}
+                            <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400 mt-1">
+                                <span>Repo: <span class="text-slate-300">${issue.repo}</span></span>
+                                <span>Author: <span class="text-blue-400">@${issue.author}</span></span>
                             </div>
                         </div>
-                    `;
-                }).join('');
+                        <a href="${issue.url}" target="_blank" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg font-mono transition-all">
+                            View Issue
+                        </a>
+                    </div>
+                `).join('');
             } else {
-                rosterContainer.innerHTML = `<div class="text-slate-500">No members listed.</div>`;
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-6 text-center space-y-3">
+                        <p class="text-xs font-mono text-slate-400">No issues found under "My Issues".</p>
+                        <a href="https://github.com/vectorial-collective" target="_blank" rel="noopener noreferrer" onclick="logIssueCreation()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs font-mono transition-all shadow-lg shadow-blue-600/20">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Create Issue on GitHub</span>
+                        </a>
+                    </div>
+                `;
             }
-
-            document.getElementById('manage-project-modal').classList.remove('hidden');
         }
 
-        async function transferLead(projectId, newLeadUserId, newLeadHandle) {
-            if (!confirm(`Are you sure you want to transfer project leadership to @${newLeadHandle}? You will become a Contributor.`)) return;
-
-            if (!currentUserGlobal) return;
-
-            const { error: projError } = await _supabase
-                .from('projects')
-                .update({ created_by: newLeadUserId })
-                .eq('id', projectId);
-
-            if (projError) {
-                alert('Error updating project owner: ' + projError.message);
-                return;
-            }
-
-            await _supabase
-                .from('project_members')
-                .update({ role: 'Lead' })
-                .eq('project_id', projectId)
-                .eq('user_id', newLeadUserId);
-
-            await _supabase
-                .from('project_members')
-                .update({ role: 'Contributor' })
-                .eq('project_id', projectId)
-                .eq('user_id', currentUserGlobal.id);
-
-            alert(`Successfully transferred leadership to @${newLeadHandle}!`);
-            closeManageProjectModal();
-            loadUserProjects(currentUserGlobal.id);
+        async function logIssueCreation() {
+            if (!currentUser) return;
+            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            await _supabase.from('activity_logs').insert([
+                { action: `@${handle} initiated new issue creation on GitHub`, user_id: currentUser.id }
+            ]);
         }
 
-        async function deleteProject(projectId) {
-            if (!confirm("Are you sure you want to delete this project? This will remove it for all contributors.")) return;
+        async function loadActivityLogs() {
+            const container = document.getElementById('activity-log-list');
+            const { data: logs, error } = await _supabase
+                .from('activity_logs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(10);
 
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (!session) return;
-
-            const { error } = await _supabase
-                .from('projects')
-                .delete()
-                .eq('id', projectId);
-
-            if (!error) {
-                closeManageProjectModal();
-                loadUserProjects(session.user.id);
+            if (logs && logs.length > 0) {
+                container.innerHTML = logs.map(log => `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
+                        <i class="fa-solid fa-terminal text-blue-400 text-xs mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-mono text-slate-200">${log.action}</p>
+                            <span class="text-[10px] font-mono text-slate-500">${new Date(log.created_at).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                `).join('');
             } else {
-                alert('Error deleting project: ' + error.message);
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                        No activity logged yet.
+                    </div>
+                `;
             }
         }
 
-        function copyShareLinkFromModal() {
-            const input = document.getElementById('share-link-input');
-            navigator.clipboard.writeText(input.value).then(() => {
-                alert("Share link copied to clipboard!");
-            });
+        async function signOut() {
+            await _supabase.auth.signOut();
+            window.location.href = 'index.html';
         }
 
-        function closeManageProjectModal() { document.getElementById('manage-project-modal').classList.add('hidden'); }
-
-        function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
-        function closeLogoutModal() { document.getElementById('logout-modal').classList.add('hidden'); }
-        async function confirmLogout() {
-            try {
-                await _supabase.auth.signOut();
-            } catch (err) {
-                console.error(err);
-            } finally {
-                window.location.href = '/index.html';
-            }
-        }
-
-        checkSession();
+        initDashboard();
     </script>
 </body>
 </html>
