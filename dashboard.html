@@ -231,7 +231,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             const joinProjectId = urlParams.get('join_project');
             if (joinProjectId) {
-                await autoJoinProject(joinProjectId, user.id);
+                await autoJoinProject(joinProjectId, user);
             }
         }
 
@@ -248,9 +248,11 @@
             fetchGitHubActivity(githubHandle);
         }
 
-        async function autoJoinProject(projectId, userId) {
+        async function autoJoinProject(projectId, user) {
             try {
-                // 1. Fetch project details to check if current user is the owner (Lead)
+                const userId = user.id;
+                const githubHandle = user.user_metadata.user_name || 'contributor';
+
                 const { data: project } = await _supabase
                     .from('projects')
                     .select('created_by')
@@ -259,10 +261,8 @@
 
                 if (!project) return;
 
-                // Determine correct role: Lead if owner, otherwise Contributor
                 const appropriateRole = (project.created_by === userId) ? 'Lead' : 'Contributor';
 
-                // 2. Check if membership entry already exists
                 const { data: existingMember } = await _supabase
                     .from('project_members')
                     .select('*')
@@ -272,12 +272,12 @@
 
                 if (!existingMember) {
                     await _supabase.from('project_members').insert([
-                        { project_id: projectId, user_id: userId, role: appropriateRole }
+                        { project_id: projectId, user_id: userId, role: appropriateRole, github_handle: githubHandle }
                     ]);
-                } else if (appropriateRole === 'Lead' && existingMember.role !== 'Lead') {
-                    // Upgrade back to Lead if owner opened their own share link
+                } else {
+                    // Update role and handle if already exists
                     await _supabase.from('project_members')
-                        .update({ role: 'Lead' })
+                        .update({ role: appropriateRole, github_handle: githubHandle })
                         .eq('project_id', projectId)
                         .eq('user_id', userId);
                 }
@@ -336,17 +336,20 @@
             
             if (!title || !session) return;
 
+            const user = session.user;
+            const githubHandle = user.user_metadata.user_name || 'operator';
+
             const { data: newProj, error } = await _supabase.from('projects').insert([
-                { title, repo_url, created_by: session.user.id }
+                { title, repo_url, created_by: user.id }
             ]).select().single();
 
             if (!error && newProj) {
                 await _supabase.from('project_members').insert([
-                    { project_id: newProj.id, user_id: session.user.id, role: 'Lead' }
+                    { project_id: newProj.id, user_id: user.id, role: 'Lead', github_handle: githubHandle }
                 ]);
 
                 closeCreateProjectModal();
-                loadUserProjects(session.user.id);
+                loadUserProjects(user.id);
                 document.getElementById('new-project-title').value = '';
                 document.getElementById('new-project-url').value = '';
             } else {
@@ -440,12 +443,12 @@
             if (members && members.length > 0) {
                 rosterContainer.innerHTML = members.map(m => `
                     <div class="flex items-center justify-between py-1 border-b border-slate-900 last:border-0">
-                        <span class="text-slate-300">UID: ${m.user_id.substring(0, 8)}...</span>
+                        <span class="text-slate-300">@${m.github_handle || 'user'}</span>
                         <span class="text-[10px] uppercase ${m.role === 'Lead' ? 'text-blue-400 font-bold' : 'text-slate-400'}">${m.role}</span>
                     </div>
                 `).join('');
             } else {
-                rosterContainer.innerHTML = `<div class="text-slate-500">1 Lead (Operator)</div>`;
+                rosterContainer.innerHTML = `<div class="text-slate-500">No members listed.</div>`;
             }
 
             document.getElementById('manage-project-modal').classList.remove('hidden');
