@@ -15,7 +15,6 @@
             background-image: radial-gradient(rgba(51, 65, 85, 0.2) 1px, transparent 1px);
             background-size: 24px 24px;
         }
-        /* Custom scrollbars matching wireframe specs */
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
@@ -26,7 +25,6 @@
     <!-- Top Command Header -->
     <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
         <a href="/index.html" class="flex items-center gap-3 group">
-            <!-- Official Logo Element (Replace SVG/Image source as needed) -->
             <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shadow-md group-hover:border-emerald-500/50 transition-colors">
                 <span class="font-bold text-emerald-400 font-mono text-sm">V</span>
             </div>
@@ -36,7 +34,7 @@
             </div>
         </a>
 
-        <!-- EST Timezone Clock & System Status -->
+        <!-- EST Clock -->
         <div class="hidden md:flex items-center gap-4 text-xs font-mono">
             <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -51,16 +49,16 @@
         </button>
     </header>
 
-    <!-- Main Dashboard Body Grid matching wireframe layout -->
+    <!-- Main Dashboard Body Grid -->
     <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-        <!-- LEFT COLUMN: Profile & Activity Log & Org Ecosystem -->
+        <!-- LEFT COLUMN -->
         <div class="lg:col-span-1 space-y-6">
             
             <!-- User Profile Card -->
             <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl flex flex-col items-center text-center">
                 <img id="user-avatar" src="https://via.placeholder.com/80" alt="User pfp" class="w-20 h-20 rounded-2xl border-2 border-slate-700 bg-slate-800 object-cover shadow-inner mb-3">
-                <h1 id="user-name" class="font-bold text-white text-base tracking-tight">Full Name</h1>
+                <h1 id="user-name" class="font-bold text-white text-base tracking-tight">Initializing...</h1>
                 <p id="user-handle" class="text-slate-400 text-xs font-mono mt-0.5">@githubhandle</p>
                 <p id="user-id" class="text-slate-500 text-[10px] font-mono mt-1 truncate w-full">UID: loading...</p>
             </div>
@@ -71,12 +69,11 @@
                     <span>My Activity Log:</span>
                     <i class="fa-solid fa-clock-rotate-left text-xs text-slate-500"></i>
                 </h2>
-                <p class="text-[11px] text-slate-400 mb-3">Past 5 contributions tracked on GitHub:</p>
+                <p class="text-[11px] text-slate-400 mb-3">Past contributions tracked on GitHub:</p>
                 
-                <!-- Scrollable Activity List -->
-                <div id="activity-log-container" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1 text-xs">
-                    <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl font-mono text-[11px] text-slate-400">
-                        Loading GitHub events...
+                <div id="activity-log-container" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1 text-xs font-mono">
+                    <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">
+                        Fetching GitHub events...
                     </div>
                 </div>
             </div>
@@ -89,7 +86,8 @@
                         <span class="text-slate-300"><i class="fa-brands fa-github mr-2"></i> GitHub Org</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
                     </a>
-                    <a href="https://discord.gg" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
+                    <!-- Updated Discord Web Link -->
+                    <a href="https://discord.gg/your-invite-code" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
                         <span class="text-slate-300"><i class="fa-brands fa-discord mr-2 text-indigo-400"></i> #the-forge</span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
                     </a>
@@ -98,7 +96,7 @@
 
         </div>
 
-        <!-- RIGHT COLUMN: Projects & Org Tasks -->
+        <!-- RIGHT COLUMN -->
         <div class="lg:col-span-3 space-y-6">
 
             <!-- Active Contributed Projects Section -->
@@ -110,25 +108,9 @@
                     </button>
                 </div>
 
-                <!-- Horizontal Scrolling Projects Container -->
                 <div id="projects-container" class="flex gap-4 overflow-x-auto custom-scrollbar pb-3 pt-1">
-                    <!-- Project Card Example -->
-                    <div class="min-w-[280px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="font-mono text-xs text-emerald-400 font-semibold">vectorial-core</span>
-                                <span class="text-[10px] font-mono bg-slate-900 text-slate-400 px-2 py-0.5 rounded">Owner</span>
-                            </div>
-                            <p class="text-xs text-slate-400 mb-4 line-clamp-2">High-performance tactical telemetry framework for open-source research.</p>
-                        </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
-                            <span class="text-slate-500 font-mono text-[11px]">3 Contributors</span>
-                            <button onclick="openManageProject('vectorial-core')" class="text-cyan-400 hover:underline">Manage &rarr;</button>
-                        </div>
-                    </div>
-                    <!-- Empty/Prompt State if none -->
                     <div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">
-                        Click "Create Project" to list your repositories or invite collaborators.
+                        Loading projects...
                     </div>
                 </div>
             </div>
@@ -137,16 +119,15 @@
             <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
                     <h2 class="font-bold text-base text-white">Org tasks and issues:</h2>
-                    <span class="text-xs font-mono text-slate-500">Auto-synced [Completed filtered]</span>
+                    <span class="text-xs font-mono text-slate-500">Auto-synced</span>
                 </div>
 
-                <!-- Vertical Scrollable Task Container -->
                 <div id="org-tasks-container" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
                     <div class="p-4 bg-slate-950/60 border border-slate-800/60 rounded-xl flex items-center justify-between text-xs">
                         <div class="flex items-center gap-3">
                             <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                             <span class="font-mono text-slate-400">#018</span>
-                            <span class="font-medium text-slate-200">Implement horizontal scroll container for active projects</span>
+                            <span class="font-medium text-slate-200">Integrate dynamic GitHub activity logs and project management modal</span>
                         </div>
                         <span class="font-mono text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 px-2.5 py-1 rounded-md">IN PROGRESS</span>
                     </div>
@@ -161,26 +142,33 @@
     <div id="create-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
             <h3 class="text-lg font-bold text-white">Create New Project</h3>
-            <p class="text-xs text-slate-400">Add a GitHub repository name and invite contributors to collaborate.</p>
-            
             <div class="space-y-3">
                 <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Project / Repo Name</label>
-                    <input type="text" id="new-project-title" placeholder="e.g. atmospheric-drag-simulator" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Project Name</label>
+                    <input type="text" id="new-project-title" placeholder="e.g. telemetry-engine" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-mono text-slate-400 mb-1">Repository URL</label>
                     <input type="text" id="new-project-url" placeholder="https://github.com/vectorial-collective/repo" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
                 </div>
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Invite Contributor (GitHub Username / UID)</label>
-                    <input type="text" id="new-project-invite" placeholder="e.g. collaborator-handle" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
-                </div>
             </div>
-
             <div class="flex gap-3 pt-2">
-                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2.5 rounded-xl border border-slate-700">Cancel</button>
-                <button onclick="saveNewProject()" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold py-2.5 rounded-xl shadow-lg">Save & Create</button>
+                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Cancel</button>
+                <button onclick="saveNewProject()" class="w-1/2 bg-emerald-600 text-slate-950 text-xs font-bold py-2.5 rounded-xl shadow-lg">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Project Modal -->
+    <div id="manage-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <h3 id="manage-modal-title" class="text-lg font-bold text-white">Manage Project</h3>
+            <p class="text-xs text-slate-400">Project collaborators and access controls.</p>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono">
+                Contributors: <span id="manage-contributors" class="text-emerald-400">Loading team...</span>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeManageProjectModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl">Close</button>
             </div>
         </div>
     </div>
@@ -197,7 +185,6 @@
         </div>
     </div>
 
-    <!-- Scripts: Supabase Session, EST Clock, and Project Handling -->
     <script>
         const { createClient } = supabase;
         const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
@@ -211,25 +198,56 @@
                 return;
             }
             const user = session.user;
-            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
-            document.getElementById('user-handle').innerText = '@' + (user.user_metadata.user_name || 'user');
+            const fullName = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
+            const githubHandle = user.user_metadata.user_name || 'user';
+
+            document.getElementById('user-name').innerText = fullName;
+            document.getElementById('user-handle').innerText = '@' + githubHandle;
             document.getElementById('user-avatar').src = user.user_metadata.avatar_url || 'https://via.placeholder.com/80';
             document.getElementById('user-id').innerText = 'UID: ' + user.id;
 
-            // Load user's projects after authentication
             loadUserProjects(user.id);
+            fetchGitHubActivity(githubHandle);
+        }
+
+        // Fetch live GitHub public contributions
+        async function fetchGitHubActivity(username) {
+            const container = document.getElementById('activity-log-container');
+            try {
+                const res = await fetch(`https://api.github.com/users/${username}/events/public?per_page=5`);
+                if (!res.ok) throw new Error('Failed to fetch events');
+                const events = await res.json();
+
+                if (events.length === 0) {
+                    container.innerHTML = `<div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">No recent public GitHub activity found.</div>`;
+                    return;
+                }
+
+                container.innerHTML = events.slice(0, 5).map(ev => {
+                    const repoName = ev.repo.name;
+                    const eventType = ev.type.replace('Event', '');
+                    return `
+                        <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl flex flex-col gap-1">
+                            <span class="text-emerald-400 font-semibold">${eventType}</span>
+                            <span class="text-slate-300 truncate">${repoName}</span>
+                            <span class="text-[10px] text-slate-500">${new Date(ev.created_at).toLocaleDateString()}</span>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl text-slate-400">Activity sync unavailable.</div>`;
+            }
         }
 
         // Live EST Clock
         function updateESTClock() {
             const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            const estString = new Intl.DateTimeFormat('en-US', options).format(new Date());
-            document.getElementById('est-clock').innerText = estString + ' EST';
+            document.getElementById('est-clock').innerText = new Intl.DateTimeFormat('en-US', options).format(new Date()) + ' EST';
         }
         setInterval(updateESTClock, 1000);
         updateESTClock();
 
-        // Project Modal Controls
+        // Project Modals
         function openCreateProjectModal() { document.getElementById('create-project-modal').classList.remove('hidden'); }
         function closeCreateProjectModal() { document.getElementById('create-project-modal').classList.add('hidden'); }
 
@@ -270,15 +288,23 @@
                             <p class="text-xs text-slate-400 mb-4 truncate">${p.repo_url || 'No repository link provided.'}</p>
                         </div>
                         <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
-                            <span class="text-slate-500 font-mono text-[11px]">Active</span>
-                            <a href="${p.repo_url || '#'}" target="_blank" class="text-cyan-400 hover:underline">View Repo &rarr;</a>
+                            <button onclick="openManageProjectModal('${p.title}')" class="text-cyan-400 hover:underline cursor-pointer">Manage &rarr;</button>
+                            <a href="${p.repo_url || '#'}" target="_blank" class="text-slate-400 hover:underline">Repo ↗</a>
                         </div>
                     </div>
                 `).join('');
+            } else {
+                container.innerHTML = `<div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">No active projects yet. Click "Create Project".</div>`;
             }
         }
 
-        // Logout Controls
+        function openManageProjectModal(projectTitle) {
+            document.getElementById('manage-modal-title').innerText = 'Manage: ' + projectTitle;
+            document.getElementById('manage-contributors').innerText = 'Owner (Primary Operator)';
+            document.getElementById('manage-project-modal').classList.remove('hidden');
+        }
+        function closeManageProjectModal() { document.getElementById('manage-project-modal').classList.add('hidden'); }
+
         function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
         function closeLogoutModal() { document.getElementById('logout-modal').classList.add('hidden'); }
         async function confirmLogout() {
