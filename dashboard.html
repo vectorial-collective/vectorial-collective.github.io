@@ -1,3 +1,70 @@
+To support project invite links, team roles (**Lead** vs **Contributor**), and automatically adding shared projects to a contributor's dashboard upon clicking a share link, we need to update both your **Supabase database schema** and your **`dashboard.html`** frontend logic.
+
+---
+
+### Step 1: Execute Updated Database SQL in Supabase
+
+Run this script in your Supabase **SQL Editor** (`>_`). It creates a project lookup function, configures Row Level Security (RLS) so all project members can read their assigned projects, and allows anyone with a valid share link to join.
+
+```sql
+-- 1. Ensure project_members table exists with role support
+create table if not exists public.project_members (
+  id uuid default gen_random_uuid() primary key,
+  project_id uuid references public.projects(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  role text default 'contributor' not null,
+  joined_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique(project_id, user_id)
+);
+
+-- Enable RLS on both tables
+alter table public.projects enable row level security;
+alter table public.project_members enable row level security;
+
+-- Clear previous restrictive policies to prevent policy conflicts
+drop policy if exists "Users can view projects they are members of" on public.projects;
+drop policy if exists "Users can create projects" on public.projects;
+drop policy if exists "Users can view project members" on public.project_members;
+drop policy if exists "Project owners can add members" on public.project_members;
+drop policy if exists "Anyone can view project details via direct link" on public.projects;
+
+-- 2. Projects RLS Policies
+create policy "Users can view member projects" on public.projects
+  for select using (
+    auth.uid() = created_by or 
+    id in (select project_id from public.project_members where user_id = auth.uid())
+  );
+
+create policy "Users can create projects" on public.projects
+  for insert with check (auth.uid() = created_by);
+
+-- 3. Project Members RLS Policies
+create policy "Members can view co-contributors" on public.project_members
+  for select using (
+    user_id = auth.uid() or
+    project_id in (select id from public.projects where created_by = auth.uid()) or
+    project_id in (select project_id from public.project_members where user_id = auth.uid())
+  );
+
+create policy "Users can join projects as contributors" on public.project_members
+  for insert with check (auth.uid() = user_id);
+
+```
+
+---
+
+### Step 2: Updated `dashboard.html`
+
+Replace your entire `dashboard.html` file in VS Code with the complete code below.
+
+#### New Features Included:
+
+1. **Automatic Creator Role:** Creating a project automatically records you as the **Lead** in both `projects` and `project_members`.
+2. **Shareable Invite Links:** Every project card has a **"Share Link"** button that copies a direct URL (e.g., `dashboard.html?join_project=<PROJECT_ID>`) to your clipboard.
+3. **Auto-Join Workflow:** When a contributor opens the share link while signed in, the system automatically adds them to the project with the **Contributor** role and refreshes their active dashboard view.
+4. **Interactive Manage Modal:** Displays the project title, repository link, unique Share Link, and full contributor roster with assigned roles (**Lead** vs **Contributor**).
+
+```html
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -158,14 +225,30 @@
         </div>
     </div>
 
-    <!-- Manage Project Modal -->
+    <!-- Manage Project & Team Roster Modal -->
     <div id="manage-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
             <h3 id="manage-modal-title" class="text-lg font-bold text-white">Manage Project</h3>
-            <p class="text-xs text-slate-400">Project collaborators and access controls.</p>
-            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono">
-                Contributors: <span id="manage-contributors" class="text-blue-400">Primary Operator</span>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Share Link for Contributors</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="share-link-input" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-mono text-slate-300 outline-none">
+                        <button onclick="copyShareLinkFromModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all flex-shrink-0 cursor-pointer">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Contributors & Team Roster</label>
+                    <div id="manage-contributors-list" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                        Loading team members...
+                    </div>
+                </div>
             </div>
+
             <div class="flex justify-end pt-2">
                 <button onclick="closeManageProjectModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl cursor-pointer">Close</button>
             </div>
@@ -198,12 +281,23 @@
                     if (!retrySession) {
                         window.location.href = '/index.html';
                     } else {
-                        renderUserDashboard(retrySession.user);
+                        handleAuthSuccess(retrySession.user);
                     }
                 }, 400);
                 return;
             }
-            renderUserDashboard(session.user);
+            handleAuthSuccess(session.user);
+        }
+
+        async function handleAuthSuccess(user) {
+            renderUserDashboard(user);
+
+            // Handle incoming project invite link URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const joinProjectId = urlParams.get('join_project');
+            if (joinProjectId) {
+                await autoJoinProject(joinProjectId, user.id);
+            }
         }
 
         function renderUserDashboard(user) {
@@ -217,6 +311,33 @@
 
             loadUserProjects(user.id);
             fetchGitHubActivity(githubHandle);
+        }
+
+        // Auto-join shared contributor project
+        async function autoJoinProject(projectId, userId) {
+            try {
+                const { data: existingMember } = await _supabase
+                    .from('project_members')
+                    .select('*')
+                    .eq('project_id', projectId)
+                    .eq('user_id', userId)
+                    .maybeSingle();
+
+                if (!existingMember) {
+                    await _supabase.from('project_members').insert([
+                        { project_id: projectId, user_id: userId, role: 'Contributor' }
+                    ]);
+                }
+                
+                // Clean URL query string without reloading page
+                const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+                
+                // Refresh project list to display newly added project
+                loadUserProjects(userId);
+            } catch (err) {
+                console.error("Auto-join error:", err);
+            }
         }
 
         async function fetchGitHubActivity(username) {
@@ -264,50 +385,130 @@
             
             if (!title || !session) return;
 
-            const { error } = await _supabase.from('projects').insert([
+            // 1. Insert into projects table
+            const { data: newProj, error } = await _supabase.from('projects').insert([
                 { title, repo_url, created_by: session.user.id }
-            ]);
+            ]).select().single();
 
-            if (!error) {
+            if (!error && newProj) {
+                // 2. Insert owner as Lead into project_members
+                await _supabase.from('project_members').insert([
+                    { project_id: newProj.id, user_id: session.user.id, role: 'Lead' }
+                ]);
+
                 closeCreateProjectModal();
                 loadUserProjects(session.user.id);
+                document.getElementById('new-project-title').value = '';
+                document.getElementById('new-project-url').value = '';
             } else {
-                alert('Error creating project: ' + error.message);
+                alert('Error creating project: ' + (error ? error.message : 'Unknown error'));
             }
         }
 
         async function loadUserProjects(userId) {
-            const { data: projects, error } = await _supabase
+            // Fetch projects created by user OR where user is listed as a member
+            const { data: createdProjects } = await _supabase
                 .from('projects')
                 .select('*')
                 .eq('created_by', userId);
 
+            const { data: memberEntries } = await _supabase
+                .from('project_members')
+                .select('project_id, role')
+                .eq('user_id', userId);
+
+            let projectMap = new Map();
+
+            if (createdProjects) {
+                createdProjects.forEach(p => projectMap.set(p.id, { ...p, role: 'Lead' }));
+            }
+
+            if (memberEntries && memberEntries.length > 0) {
+                const memberProjectIds = memberEntries.map(m => m.project_id);
+                const { data: joinedProjects } = await _supabase
+                    .from('projects')
+                    .select('*')
+                    .in('id', memberProjectIds);
+
+                if (joinedProjects) {
+                    joinedProjects.forEach(p => {
+                        const entry = memberEntries.find(m => m.project_id === p.id);
+                        const assignedRole = entry ? entry.role : (p.created_by === userId ? 'Lead' : 'Contributor');
+                        projectMap.set(p.id, { ...p, role: assignedRole });
+                    });
+                }
+            }
+
+            const projects = Array.from(projectMap.values());
             const container = document.getElementById('projects-container');
+            
             if (projects && projects.length > 0) {
-                container.innerHTML = projects.map(p => `
-                    <div class="min-w-[280px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="font-mono text-xs text-blue-400 font-semibold truncate max-w-[180px]">${p.title}</span>
-                                <span class="text-[10px] font-mono bg-slate-900 text-slate-400 px-2 py-0.5 rounded">Owner</span>
+                container.innerHTML = projects.map(p => {
+                    const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${p.id}`;
+                    return `
+                        <div class="min-w-[290px] max-w-[320px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-mono text-xs text-blue-400 font-semibold truncate max-w-[170px]">${p.title}</span>
+                                    <span class="text-[10px] font-mono ${p.role === 'Lead' ? 'bg-blue-950 text-blue-400 border border-blue-800' : 'bg-slate-900 text-slate-400'} px-2 py-0.5 rounded font-bold uppercase">${p.role}</span>
+                                </div>
+                                <p class="text-xs text-slate-400 mb-3 truncate">${p.repo_url || 'No repository URL provided.'}</p>
                             </div>
-                            <p class="text-xs text-slate-400 mb-4 truncate">${p.repo_url || 'No repository link provided.'}</p>
+                            <div class="space-y-2 pt-2 border-t border-slate-900 text-xs">
+                                <div class="flex items-center justify-between">
+                                    <button onclick="copyProjectShareLink('${shareUrl}')" class="text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer">
+                                        <i class="fa-solid fa-link text-[10px]"></i> Share Link
+                                    </button>
+                                    <button onclick="openManageProjectModal('${p.id}', '${p.title}')" class="text-blue-400 hover:underline cursor-pointer">Manage &rarr;</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
-                            <button onclick="openManageProjectModal('${p.title}')" class="text-blue-400 hover:underline cursor-pointer">Manage &rarr;</button>
-                            <a href="${p.repo_url || '#'}" target="_blank" class="text-slate-400 hover:underline">Repo ↗</a>
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             } else {
                 container.innerHTML = `<div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">No active projects yet. Click "Create Project".</div>`;
             }
         }
 
-        function openManageProjectModal(projectTitle) {
+        function copyProjectShareLink(url) {
+            navigator.clipboard.writeText(url).then(() => {
+                alert("Share link copied to clipboard! Share it with contributors so they can join your project.");
+            });
+        }
+
+        async function openManageProjectModal(projectId, projectTitle) {
             document.getElementById('manage-modal-title').innerText = 'Manage: ' + projectTitle;
+            const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${projectId}`;
+            document.getElementById('share-link-input').value = shareUrl;
+
+            // Fetch roster members
+            const { data: members } = await _supabase
+                .from('project_members')
+                .select('*')
+                .eq('project_id', projectId);
+
+            const rosterContainer = document.getElementById('manage-contributors-list');
+            if (members && members.length > 0) {
+                rosterContainer.innerHTML = members.map(m => `
+                    <div class="flex items-center justify-between py-1 border-b border-slate-900 last:border-0">
+                        <span class="text-slate-300">UID: ${m.user_id.substring(0, 8)}...</span>
+                        <span class="text-[10px] uppercase ${m.role === 'Lead' ? 'text-blue-400 font-bold' : 'text-slate-400'}">${m.role}</span>
+                    </div>
+                `).join('');
+            } else {
+                rosterContainer.innerHTML = `<div class="text-slate-500">1 Lead (Operator)</div>`;
+            }
+
             document.getElementById('manage-project-modal').classList.remove('hidden');
         }
+
+        function copyShareLinkFromModal() {
+            const input = document.getElementById('share-link-input');
+            navigator.clipboard.writeText(input.value).then(() => {
+                alert("Share link copied to clipboard!");
+            });
+        }
+
         function closeManageProjectModal() { document.getElementById('manage-project-modal').classList.add('hidden'); }
 
         function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
@@ -326,3 +527,5 @@
     </script>
 </body>
 </html>
+
+```
