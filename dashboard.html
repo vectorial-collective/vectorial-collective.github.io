@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telemetry & Member Dashboard | Vectorial Collective</title>
+    <title>Member Dashboard | Vectorial Collective</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,291 +15,195 @@
             background-image: radial-gradient(rgba(51, 65, 85, 0.2) 1px, transparent 1px);
             background-size: 24px 24px;
         }
+        /* Custom scrollbars matching wireframe specs */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-slate-950 grid-pattern relative flex flex-col">
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-emerald-500 selection:text-slate-950 grid-pattern flex flex-col">
 
-    <!-- Top Command Telemetry Header -->
+    <!-- Top Command Header -->
     <header class="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
-        <div class="flex items-center gap-4">
-            <a href="/index.html" class="flex items-center gap-2.5 group">
-                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center font-bold text-emerald-400 font-mono text-xs group-hover:border-emerald-400 transition-colors">
-                    VC
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold text-sm tracking-tight text-white leading-none">Vectorial Collective</span>
-                    <span class="text-[10px] font-mono text-slate-500 leading-none mt-1">TELEMETRY // DASHBOARD v2.4</span>
-                </div>
-            </a>
-        </div>
+        <a href="/index.html" class="flex items-center gap-3 group">
+            <!-- Official Logo Element (Replace SVG/Image source as needed) -->
+            <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center shadow-md group-hover:border-emerald-500/50 transition-colors">
+                <span class="font-bold text-emerald-400 font-mono text-sm">V</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="font-bold text-sm tracking-tight text-white leading-none">Vectorial Collective</span>
+                <span class="text-[10px] font-mono text-slate-500 leading-none mt-1">OPERATOR DASHBOARD</span>
+            </div>
+        </a>
 
-        <!-- Telemetry Status Indicators -->
-        <div class="hidden md:flex items-center gap-6 text-xs font-mono">
-            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800/80 px-3 py-1.5 rounded-lg">
+        <!-- EST Timezone Clock & System Status -->
+        <div class="hidden md:flex items-center gap-4 text-xs font-mono">
+            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-slate-400">SYS_STATUS:</span>
-                <span class="text-emerald-400 font-semibold">ONLINE</span>
-            </div>
-            <div class="flex items-center gap-2 bg-slate-900 border border-slate-800/80 px-3 py-1.5 rounded-lg">
-                <i class="fa-regular fa-clock text-slate-400"></i>
-                <span id="utc-clock" class="text-slate-200">00:00:00 UTC</span>
+                <span class="text-slate-400">EST Time:</span>
+                <span id="est-clock" class="text-slate-200 font-semibold">00:00:00 EST</span>
             </div>
         </div>
 
-        <!-- User Quick Status & Exit -->
-        <div class="flex items-center gap-3">
-            <div class="hidden sm:flex items-center gap-2 bg-slate-900/80 border border-slate-800/80 px-3 py-1.5 rounded-lg">
-                <span class="text-[11px] font-mono text-slate-400">SESSION: ACTIVE</span>
-            </div>
-            <button onclick="openLogoutModal()" class="text-xs font-semibold bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-800/50 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-2">
-                <i class="fa-solid fa-power-off text-xs"></i>
-                <span class="hidden sm:inline">Sign Out</span>
-            </button>
-        </div>
+        <button onclick="openLogoutModal()" class="text-xs font-semibold bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-800/50 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-2">
+            <i class="fa-solid fa-power-off text-xs"></i>
+            <span>Sign Out</span>
+        </button>
     </header>
 
-    <!-- Main Dashboard Container -->
-    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-6">
+    <!-- Main Dashboard Body Grid matching wireframe layout -->
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-        <!-- Top Overview Banner -->
-        <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden">
-            <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
+        <!-- LEFT COLUMN: Profile & Activity Log & Org Ecosystem -->
+        <div class="lg:col-span-1 space-y-6">
             
-            <div class="flex items-center gap-5 z-10">
-                <div class="relative">
-                    <img id="user-avatar" src="https://via.placeholder.com/80" alt="Avatar" class="w-16 h-16 rounded-xl border border-slate-700 bg-slate-800 object-cover shadow-lg">
-                    <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-slate-950 rounded-full"></span>
-                </div>
-                <div>
-                    <div class="flex items-center gap-3">
-                        <h1 id="user-name" class="text-xl font-bold text-white tracking-tight">Initializing Operator...</h1>
-                        <span class="bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 text-[10px] font-mono px-2.5 py-0.5 rounded-md uppercase tracking-wider font-semibold">Verified Member</span>
+            <!-- User Profile Card -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl flex flex-col items-center text-center">
+                <img id="user-avatar" src="https://via.placeholder.com/80" alt="User pfp" class="w-20 h-20 rounded-2xl border-2 border-slate-700 bg-slate-800 object-cover shadow-inner mb-3">
+                <h1 id="user-name" class="font-bold text-white text-base tracking-tight">Full Name</h1>
+                <p id="user-handle" class="text-slate-400 text-xs font-mono mt-0.5">@githubhandle</p>
+                <p id="user-id" class="text-slate-500 text-[10px] font-mono mt-1 truncate w-full">UID: loading...</p>
+            </div>
+
+            <!-- My Activity Log Card -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl flex flex-col">
+                <h2 class="font-bold text-sm text-white mb-3 flex items-center justify-between">
+                    <span>My Activity Log:</span>
+                    <i class="fa-solid fa-clock-rotate-left text-xs text-slate-500"></i>
+                </h2>
+                <p class="text-[11px] text-slate-400 mb-3">Past 5 contributions tracked on GitHub:</p>
+                
+                <!-- Scrollable Activity List -->
+                <div id="activity-log-container" class="space-y-2.5 max-h-64 overflow-y-auto custom-scrollbar pr-1 text-xs">
+                    <div class="p-3 bg-slate-950/60 border border-slate-800/60 rounded-xl font-mono text-[11px] text-slate-400">
+                        Loading GitHub events...
                     </div>
-                    <p id="user-handle" class="text-slate-400 text-xs font-mono mt-1">@username</p>
-                    <p id="user-id" class="text-slate-500 text-[11px] font-mono mt-1 truncate max-w-xs sm:max-w-md">UID: ------------------------------------</p>
                 </div>
             </div>
 
-            <!-- Quick Metrics Grid -->
-            <div class="grid grid-cols-3 gap-3 w-full md:w-auto font-mono z-10">
-                <div class="bg-slate-950/60 border border-slate-800/60 p-3 rounded-xl text-center">
-                    <span class="text-[10px] text-slate-500 uppercase block">Repos</span>
-                    <span class="text-base font-bold text-white mt-0.5 block">04</span>
-                </div>
-                <div class="bg-slate-950/60 border border-slate-800/60 p-3 rounded-xl text-center">
-                    <span class="text-[10px] text-slate-500 uppercase block">Tasks</span>
-                    <span id="metric-tasks" class="text-base font-bold text-emerald-400 mt-0.5 block">00</span>
-                </div>
-                <div class="bg-slate-950/60 border border-slate-800/60 p-3 rounded-xl text-center">
-                    <span class="text-[10px] text-slate-500 uppercase block">Presets</span>
-                    <span id="metric-presets" class="text-base font-bold text-cyan-400 mt-0.5 block">02</span>
+            <!-- Org Ecosystem Links -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-5 backdrop-blur shadow-xl">
+                <h3 class="font-bold text-xs text-slate-400 uppercase tracking-wider font-mono mb-3">Org Ecosystem</h3>
+                <div class="space-y-2 text-xs">
+                    <a href="https://github.com/vectorial-collective" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
+                        <span class="text-slate-300"><i class="fa-brands fa-github mr-2"></i> GitHub Org</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
+                    </a>
+                    <a href="https://discord.gg" target="_blank" class="flex items-center justify-between p-2.5 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all">
+                        <span class="text-slate-300"><i class="fa-brands fa-discord mr-2 text-indigo-400"></i> #the-forge</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600"></i>
+                    </a>
                 </div>
             </div>
+
         </div>
 
-        <!-- Telemetry Main Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- RIGHT COLUMN: Projects & Org Tasks -->
+        <div class="lg:col-span-3 space-y-6">
 
-            <!-- Column 1 & 2: Main Telemetry Workspaces -->
-            <div class="lg:col-span-2 space-y-6">
-
-                <!-- Interactive Physics Preset Console -->
-                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
-                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-800/60">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-sm">
-                                <i class="fa-solid fa-atom"></i>
-                            </div>
-                            <div>
-                                <h2 class="font-bold text-base text-white">Atmospheric Drag & Descent Console</h2>
-                                <p class="text-slate-400 text-xs">Run real-time parameter tests or launch saved target presets.</p>
-                            </div>
-                        </div>
-                        <span class="text-[11px] font-mono bg-cyan-950/60 text-cyan-400 border border-cyan-800/60 px-2.5 py-1 rounded-md">SIMULATOR_ENGINE</span>
-                    </div>
-
-                    <!-- Interactive Slider Controls -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-                        <div class="bg-slate-950/60 border border-slate-800/60 p-4 rounded-xl space-y-2">
-                            <div class="flex justify-between text-xs font-mono">
-                                <span class="text-slate-400">Drag Coeff (C_d)</span>
-                                <span id="val-cd" class="text-cyan-400 font-bold">0.47</span>
-                            </div>
-                            <input type="range" id="input-cd" min="0.1" max="1.5" step="0.01" value="0.47" oninput="updateSimData()" class="w-full accent-cyan-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer">
-                        </div>
-
-                        <div class="bg-slate-950/60 border border-slate-800/60 p-4 rounded-xl space-y-2">
-                            <div class="flex justify-between text-xs font-mono">
-                                <span class="text-slate-400">Mass (m) [kg]</span>
-                                <span id="val-mass" class="text-emerald-400 font-bold">75.0</span>
-                            </div>
-                            <input type="range" id="input-mass" min="1" max="500" step="1" value="75" oninput="updateSimData()" class="w-full accent-emerald-400 bg-slate-800 h-1.5 rounded-lg cursor-pointer">
-                        </div>
-                    </div>
-
-                    <!-- Computed Telemetry Output -->
-                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 flex items-center justify-between font-mono text-xs mb-6">
-                        <div class="flex items-center gap-3">
-                            <i class="fa-solid fa-gauge-high text-slate-500"></i>
-                            <span class="text-slate-400">Computed Terminal Velocity (v_t):</span>
-                        </div>
-                        <span id="output-vt" class="text-base font-bold text-emerald-400">55.24 m/s</span>
-                    </div>
-
-                    <!-- Preset Selector Tabs -->
-                    <div class="space-y-3">
-                        <span class="text-xs font-mono uppercase text-slate-500 tracking-wider">Quick Presets</span>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <button onclick="loadPreset('apollo')" class="flex items-center justify-between p-3 bg-slate-950/40 hover:bg-slate-800/60 border border-slate-800/60 hover:border-slate-700 rounded-xl transition-all text-left group">
-                                <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-rocket text-slate-500 group-hover:text-cyan-400 transition-colors"></i>
-                                    <div>
-                                        <div class="text-xs font-semibold text-slate-200">Apollo LM Descent</div>
-                                        <div class="text-[10px] font-mono text-slate-500">m=15200kg | Cd=1.05</div>
-                                    </div>
-                                </div>
-                                <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-slate-300"></i>
-                            </button>
-
-                            <button onclick="loadPreset('skydiver')" class="flex items-center justify-between p-3 bg-slate-950/40 hover:bg-slate-800/60 border border-slate-800/60 hover:border-slate-700 rounded-xl transition-all text-left group">
-                                <div class="flex items-center gap-3">
-                                    <i class="fa-solid fa-person-falling text-slate-500 group-hover:text-emerald-400 transition-colors"></i>
-                                    <div>
-                                        <div class="text-xs font-semibold text-slate-200">Standard Skydiver</div>
-                                        <div class="text-[10px] font-mono text-slate-500">m=75kg | Cd=0.47</div>
-                                    </div>
-                                </div>
-                                <i class="fa-solid fa-chevron-right text-xs text-slate-600 group-hover:text-slate-300"></i>
-                            </button>
-                        </div>
-                    </div>
+            <!-- Active Contributed Projects Section -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
+                    <h2 class="font-bold text-base text-white">My active contributed projects:</h2>
+                    <button onclick="openCreateProjectModal()" class="text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-slate-950 px-4 py-2 rounded-xl shadow-lg transition-all cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Create Project
+                    </button>
                 </div>
 
-                <!-- Claimed Issues & Organization Tasks -->
-                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
-                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-slate-800/60">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-sm">
-                                <i class="fa-solid fa-code-branch"></i>
+                <!-- Horizontal Scrolling Projects Container -->
+                <div id="projects-container" class="flex gap-4 overflow-x-auto custom-scrollbar pb-3 pt-1">
+                    <!-- Project Card Example -->
+                    <div class="min-w-[280px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-mono text-xs text-emerald-400 font-semibold">vectorial-core</span>
+                                <span class="text-[10px] font-mono bg-slate-900 text-slate-400 px-2 py-0.5 rounded">Owner</span>
                             </div>
-                            <div>
-                                <h2 class="font-bold text-base text-white">Organization Tasks & Issues</h2>
-                                <p class="text-slate-400 text-xs">Active issue telemetry linked across Vectorial Collective repositories.</p>
-                            </div>
+                            <p class="text-xs text-slate-400 mb-4 line-clamp-2">High-performance tactical telemetry framework for open-source research.</p>
                         </div>
-                        <button onclick="refreshTasks()" class="text-xs font-mono text-slate-400 hover:text-white transition-colors bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2">
-                            <i class="fa-solid fa-rotate-right text-[10px]"></i> Refresh
-                        </button>
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
+                            <span class="text-slate-500 font-mono text-[11px]">3 Contributors</span>
+                            <button onclick="openManageProject('vectorial-core')" class="text-cyan-400 hover:underline">Manage &rarr;</button>
+                        </div>
                     </div>
-
-                    <div id="tasks-container" class="space-y-3">
-                        <div class="p-4 bg-slate-950/60 border border-slate-800/60 rounded-xl flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-3">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                                <span class="font-mono text-slate-400">#014</span>
-                                <span class="font-medium text-slate-200">Refactor Supabase OAuth prompt settings</span>
-                            </div>
-                            <span class="font-mono text-[10px] bg-slate-800 text-slate-400 px-2.5 py-1 rounded-md">COMPLETED</span>
-                        </div>
-                        <div class="p-4 bg-slate-950/60 border border-slate-800/60 rounded-xl flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-3">
-                                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                                <span class="font-mono text-slate-400">#015</span>
-                                <span class="font-medium text-slate-200">Integrate real-time telemetry HUD parameters</span>
-                            </div>
-                            <span class="font-mono text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 px-2.5 py-1 rounded-md">IN PROGRESS</span>
-                        </div>
+                    <!-- Empty/Prompt State if none -->
+                    <div class="min-w-[280px] bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-4 flex items-center justify-center text-center text-slate-500 text-xs">
+                        Click "Create Project" to list your repositories or invite collaborators.
                     </div>
                 </div>
-
             </div>
 
-            <!-- Column 3: System Status & Feed -->
-            <div class="space-y-6">
-
-                <!-- Ecosystem Quick Links -->
-                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
-                    <h3 class="font-bold text-sm text-white mb-4 uppercase tracking-wider font-mono text-slate-400">Organization Ecosystem</h3>
-                    <div class="space-y-2.5 text-xs font-medium">
-                        <a href="https://github.com/vectorial-collective" target="_blank" class="flex items-center justify-between p-3 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all group">
-                            <span class="text-slate-300 group-hover:text-white flex items-center gap-2.5">
-                                <i class="fa-brands fa-github text-sm text-slate-400"></i> GitHub Org
-                            </span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600 group-hover:text-slate-400"></i>
-                        </a>
-                        <a href="https://discord.gg" target="_blank" class="flex items-center justify-between p-3 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all group">
-                            <span class="text-slate-300 group-hover:text-white flex items-center gap-2.5">
-                                <i class="fa-brands fa-discord text-sm text-indigo-400"></i> #the-forge (Discord)
-                            </span>
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-600 group-hover:text-slate-400"></i>
-                        </a>
-                        <a href="/index.html" class="flex items-center justify-between p-3 bg-slate-950/60 hover:bg-slate-800/60 border border-slate-800/60 rounded-xl transition-all group">
-                            <span class="text-slate-300 group-hover:text-white flex items-center gap-2.5">
-                                <i class="fa-solid fa-globe text-sm text-emerald-400"></i> Vectorial Public Landing
-                            </span>
-                            <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-slate-400"></i>
-                        </a>
-                    </div>
+            <!-- Org Tasks and Issues Section -->
+            <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
+                    <h2 class="font-bold text-base text-white">Org tasks and issues:</h2>
+                    <span class="text-xs font-mono text-slate-500">Auto-synced [Completed filtered]</span>
                 </div>
 
-                <!-- Live Stream Feed Placeholder -->
-                <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 backdrop-blur shadow-xl font-mono">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-xs uppercase text-slate-400 font-bold tracking-wider">Activity Log</span>
-                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    </div>
-                    <div class="space-y-3 text-[11px] text-slate-400 leading-relaxed">
-                        <div class="border-l-2 border-emerald-500/50 pl-3 py-0.5">
-                            <span class="text-slate-500">[SYSTEM]</span> OAuth Session verified via Supabase.
+                <!-- Vertical Scrollable Task Container -->
+                <div id="org-tasks-container" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
+                    <div class="p-4 bg-slate-950/60 border border-slate-800/60 rounded-xl flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-3">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            <span class="font-mono text-slate-400">#018</span>
+                            <span class="font-medium text-slate-200">Implement horizontal scroll container for active projects</span>
                         </div>
-                        <div class="border-l-2 border-cyan-500/50 pl-3 py-0.5">
-                            <span class="text-slate-500">[SIMULATOR]</span> Terminal velocity module ready.
-                        </div>
-                        <div class="border-l-2 border-slate-700 pl-3 py-0.5">
-                            <span class="text-slate-500">[DISCORD]</span> Webhook payload synchronization verified.
-                        </div>
+                        <span class="font-mono text-[10px] bg-cyan-950 text-cyan-400 border border-cyan-800 px-2.5 py-1 rounded-md">IN PROGRESS</span>
                     </div>
                 </div>
-
             </div>
 
         </div>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-900 py-6 px-6 text-center text-slate-500 text-xs font-mono">
-        <p>&copy; 2026 Vectorial Collective. Open Source Initiative under MIT License.</p>
-    </footer>
-
-    <!-- Sign Out Confirmation Modal Overlay -->
-    <div id="logout-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
-            <div class="w-12 h-12 bg-red-950/50 border border-red-800/50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-400">
-                <i class="fa-solid fa-power-off text-lg"></i>
+    <!-- Create Project Modal -->
+    <div id="create-project-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <h3 class="text-lg font-bold text-white">Create New Project</h3>
+            <p class="text-xs text-slate-400">Add a GitHub repository name and invite contributors to collaborate.</p>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Project / Repo Name</label>
+                    <input type="text" id="new-project-title" placeholder="e.g. atmospheric-drag-simulator" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Repository URL</label>
+                    <input type="text" id="new-project-url" placeholder="https://github.com/vectorial-collective/repo" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Invite Contributor (GitHub Username / UID)</label>
+                    <input type="text" id="new-project-invite" placeholder="e.g. collaborator-handle" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none">
+                </div>
             </div>
-            <h3 class="text-lg font-bold text-white mb-2">Sign Out</h3>
-            <p class="text-sm text-slate-400 mb-6">Are you sure you want to end your telemetry session?</p>
-            <div class="flex gap-3 justify-center">
-                <button onclick="closeLogoutModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold py-2.5 rounded-xl border border-slate-700 transition-all cursor-pointer">
-                    Cancel
-                </button>
-                <button onclick="confirmLogout()" class="w-1/2 bg-red-600 hover:bg-red-500 text-white text-sm font-semibold py-2.5 rounded-xl shadow-lg transition-all cursor-pointer">
-                    Sign Out
-                </button>
+
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeCreateProjectModal()" class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold py-2.5 rounded-xl border border-slate-700">Cancel</button>
+                <button onclick="saveNewProject()" class="w-1/2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold py-2.5 rounded-xl shadow-lg">Save & Create</button>
             </div>
         </div>
     </div>
 
-    <!-- Supabase & Interactive Script -->
+    <!-- Sign Out Modal -->
+    <div id="logout-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center">
+            <h3 class="text-lg font-bold text-white mb-2">Sign Out</h3>
+            <p class="text-sm text-slate-400 mb-6">Are you sure you want to sign out?</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="closeLogoutModal()" class="w-1/2 bg-slate-800 text-slate-300 text-xs font-semibold py-2.5 rounded-xl">Cancel</button>
+                <button onclick="confirmLogout()" class="w-1/2 bg-red-600 text-white text-xs font-semibold py-2.5 rounded-xl">Sign Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: Supabase Session, EST Clock, and Project Handling -->
     <script>
         const { createClient } = supabase;
-        // Your actual project URL and public anon key:
         const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
-        const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
+        const supabaseKey = 'YOUR_ACTUAL_ANON_PUBLISHABLE_KEY';
         const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        // Session Authentication Verification
         async function checkSession() {
             const { data: { session }, error } = await _supabase.auth.getSession();
             if (error || !session) {
@@ -307,69 +211,82 @@
                 return;
             }
             const user = session.user;
-            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name || 'Member Operator';
+            document.getElementById('user-name').innerText = user.user_metadata.full_name || user.user_metadata.user_name || 'Member';
             document.getElementById('user-handle').innerText = '@' + (user.user_metadata.user_name || 'user');
             document.getElementById('user-avatar').src = user.user_metadata.avatar_url || 'https://via.placeholder.com/80';
             document.getElementById('user-id').innerText = 'UID: ' + user.id;
+
+            // Load user's projects after authentication
+            loadUserProjects(user.id);
         }
 
-        // Real-Time UTC Clock
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('utc-clock').innerText = now.toUTCString().split(' ')[4] + ' UTC';
+        // Live EST Clock
+        function updateESTClock() {
+            const options = { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const estString = new Intl.DateTimeFormat('en-US', options).format(new Date());
+            document.getElementById('est-clock').innerText = estString + ' EST';
         }
-        setInterval(updateClock, 1000);
-        updateClock();
+        setInterval(updateESTClock, 1000);
+        updateESTClock();
 
-        // Simulator Calculation Logic
-        function updateSimData() {
-            const cd = parseFloat(document.getElementById('input-cd').value);
-            const mass = parseFloat(document.getElementById('input-mass').value);
+        // Project Modal Controls
+        function openCreateProjectModal() { document.getElementById('create-project-modal').classList.remove('hidden'); }
+        function closeCreateProjectModal() { document.getElementById('create-project-modal').classList.add('hidden'); }
+
+        async function saveNewProject() {
+            const title = document.getElementById('new-project-title').value;
+            const repo_url = document.getElementById('new-project-url').value;
+            const { data: { session } } = await _supabase.auth.getSession();
             
-            document.getElementById('val-cd').innerText = cd.toFixed(2);
-            document.getElementById('val-mass').innerText = mass.toFixed(1);
+            if (!title || !session) return;
 
-            const g = 9.81;
-            const rho = 1.225;
-            const area = 0.7;
-            
-            const vt = Math.sqrt((2 * mass * g) / (rho * area * cd));
-            document.getElementById('output-vt').innerText = vt.toFixed(2) + ' m/s';
-        }
+            const { error } = await _supabase.from('projects').insert([
+                { title, repo_url, created_by: session.user.id }
+            ]);
 
-        function loadPreset(type) {
-            if (type === 'apollo') {
-                document.getElementById('input-cd').value = 1.05;
-                document.getElementById('input-mass').value = 450;
-            } else if (type === 'skydiver') {
-                document.getElementById('input-cd').value = 0.47;
-                document.getElementById('input-mass').value = 75;
+            if (!error) {
+                closeCreateProjectModal();
+                loadUserProjects(session.user.id);
+            } else {
+                alert('Error creating project: ' + error.message);
             }
-            updateSimData();
         }
 
-        // Modal Controls & Guaranteed Sign Out
+        async function loadUserProjects(userId) {
+            const { data: projects, error } = await _supabase
+                .from('projects')
+                .select('*')
+                .eq('created_by', userId);
+
+            const container = document.getElementById('projects-container');
+            if (projects && projects.length > 0) {
+                container.innerHTML = projects.map(p => `
+                    <div class="min-w-[280px] bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between shadow-md">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-mono text-xs text-emerald-400 font-semibold truncate max-w-[180px]">${p.title}</span>
+                                <span class="text-[10px] font-mono bg-slate-900 text-slate-400 px-2 py-0.5 rounded">Owner</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mb-4 truncate">${p.repo_url || 'No repository link provided.'}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-3 border-t border-slate-900 text-xs">
+                            <span class="text-slate-500 font-mono text-[11px]">Active</span>
+                            <a href="${p.repo_url || '#'}" target="_blank" class="text-cyan-400 hover:underline">View Repo &rarr;</a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Logout Controls
         function openLogoutModal() { document.getElementById('logout-modal').classList.remove('hidden'); }
         function closeLogoutModal() { document.getElementById('logout-modal').classList.add('hidden'); }
-        
         async function confirmLogout() {
-            try {
-                await _supabase.auth.signOut();
-            } catch (err) {
-                console.error('Sign out error:', err);
-            } finally {
-                // Guaranteed redirection back to landing page
-                window.location.href = '/index.html';
-            }
+            await _supabase.auth.signOut();
+            window.location.href = '/index.html';
         }
 
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('logout-modal');
-            if (e.target === modal) closeLogoutModal();
-        });
-
         checkSession();
-        updateSimData();
     </script>
 </body>
 </html>
