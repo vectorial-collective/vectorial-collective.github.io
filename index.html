@@ -130,7 +130,7 @@
                     <div>
                         <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Interactive Computational Kernel</span>
                         <h2 class="text-xl font-bold text-white mt-1">Escape Velocity & Gravitational Simulator</h2>
-                        <p class="text-xs text-slate-400 mt-0.5 font-mono">Modeled by Divyansh Kumar (dkum34743)</p>
+                        <p class="text-xs text-slate-400 mt-0.5 font-mono">Algorithm by <a href="https://github.com/dkum34743" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">Divyansh Kumar (dkum34743)</a></p>
                     </div>
                     <div class="flex items-center gap-2 font-mono text-xs bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -247,12 +247,14 @@
     </main>
 
     <footer class="max-w-6xl mx-auto px-6 py-12 border-t border-slate-800/80 text-slate-500 text-xs w-full">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <img src="assets/logo.png" alt="Logo" class="w-7 h-7 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
                 <span class="text-slate-300 font-semibold">Vectorial Collective</span>
             </div>
-            <span class="text-[11px] font-mono text-slate-400">Simulation Kernel by Divyansh Kumar (dkum34743)</span>
+            <span class="text-[11px] font-mono text-slate-400">
+                Simulation Kernel by <a href="https://github.com/dkum34743" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">Divyansh Kumar (dkum34743)</a>
+            </span>
         </div>
     </footer>
 
@@ -285,7 +287,7 @@
 
         checkIndexSession();
 
-        // Simulator Logic (Based on Divyansh's Escape Velocity Python code)
+        // Simulator Logic
         function updatePreset() {
             const preset = document.getElementById('mass-preset').value;
             const customContainer = document.getElementById('custom-mass-container');
@@ -307,7 +309,6 @@
             const R = parseFloat(document.getElementById('radius-slider').value);
             document.getElementById('radius-val').innerText = R.toLocaleString() + ' m';
 
-            // Core formula: escape_velocity = int(((2*G*M)/R)**0.5)
             const escapeVelocity = Math.round(Math.sqrt((2 * G * M) / R));
             const kmh = Math.round(escapeVelocity * 3.6);
 
@@ -328,7 +329,6 @@
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
 
-            // Draw Planet Core
             ctx.beginPath();
             ctx.arc(cx, cy, 45, 0, Math.PI * 2);
             const gradient = ctx.createRadialGradient(cx - 15, cy - 15, 5, cx, cy, 45);
@@ -340,7 +340,6 @@
             ctx.strokeStyle = '#93c5fd';
             ctx.stroke();
 
-            // Draw Orbit Ring representing distance R
             const orbitRadius = 90 + ((radius - 1000000) / 49000000) * 50;
             ctx.beginPath();
             ctx.arc(cx, cy, orbitRadius, 0, Math.PI * 2);
@@ -349,7 +348,6 @@
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // Draw orbiting spacecraft/probe
             angle += 0.02;
             const px = cx + Math.cos(angle) * orbitRadius;
             const py = cy + Math.sin(angle) * orbitRadius;
@@ -363,7 +361,6 @@
             ctx.shadowBlur = 0;
         }
 
-        // Animation loop for canvas
         function animate() {
             const R = parseFloat(document.getElementById('radius-slider').value);
             drawSimulation(R);
