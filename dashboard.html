@@ -175,8 +175,8 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Contributors & Team Roster</label>
-                    <div id="manage-contributors-list" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono space-y-2 max-h-40 overflow-y-auto custom-scrollbar">
+                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Contributors & Team Roster (Click Transfer to promote)</label>
+                    <div id="manage-contributors-list" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 font-mono space-y-2 max-h-44 overflow-y-auto custom-scrollbar">
                         Loading team members...
                     </div>
                 </div>
@@ -208,6 +208,7 @@
         const supabaseUrl = 'https://aqrcbiwsnkgrgjdxbpes.supabase.co';
         const supabaseKey = 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY';
         const _supabase = createClient(supabaseUrl, supabaseKey);
+        let currentUserGlobal = null;
 
         async function checkSession() {
             const { data: { session }, error } = await _supabase.auth.getSession();
@@ -217,11 +218,13 @@
                     if (!retrySession) {
                         window.location.href = '/index.html';
                     } else {
+                        currentUserGlobal = retrySession.user;
                         handleAuthSuccess(retrySession.user);
                     }
                 }, 400);
                 return;
             }
+            currentUserGlobal = session.user;
             handleAuthSuccess(session.user);
         }
 
@@ -410,7 +413,7 @@
                                     <button onclick="copyProjectShareLink('${shareUrl}')" class="text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer">
                                         <i class="fa-solid fa-link text-[10px]"></i> Share Link
                                     </button>
-                                    <button onclick="openManageProjectModal('${p.id}', '${p.title}')" class="text-blue-400 hover:underline cursor-pointer">Manage &rarr;</button>
+                                    <button onclick="openManageProjectModal('${p.id}', '${p.title}', '${p.created_by}')" class="text-blue-400 hover:underline cursor-pointer">Manage &rarr;</button>
                                 </div>
                             </div>
                         </div>
@@ -427,7 +430,7 @@
             });
         }
 
-        async function openManageProjectModal(projectId, projectTitle) {
+        async function openManageProjectModal(projectId, projectTitle, projectCreatedBy) {
             document.getElementById('manage-modal-title').innerText = 'Manage: ' + projectTitle;
             const shareUrl = `${window.location.origin}${window.location.pathname}?join_project=${projectId}`;
             document.getElementById('share-link-input').value = shareUrl;
@@ -439,19 +442,70 @@
                 .select('*')
                 .eq('project_id', projectId);
 
+            const isCurrentLead = (currentUserGlobal && currentUserGlobal.id === projectCreatedBy);
+
             const rosterContainer = document.getElementById('manage-contributors-list');
             if (members && members.length > 0) {
-                rosterContainer.innerHTML = members.map(m => `
-                    <div class="flex items-center justify-between py-1 border-b border-slate-900 last:border-0">
-                        <span class="text-slate-300">@${m.github_handle || 'user'}</span>
-                        <span class="text-[10px] uppercase ${m.role === 'Lead' ? 'text-blue-400 font-bold' : 'text-slate-400'}">${m.role}</span>
-                    </div>
-                `).join('');
+                rosterContainer.innerHTML = members.map(m => {
+                    const isSelf = (currentUserGlobal && currentUserGlobal.id === m.user_id);
+                    const canTransferToThisUser = (isCurrentLead && !isSelf && m.role !== 'Lead');
+
+                    return `
+                        <div class="flex items-center justify-between py-1.5 border-b border-slate-900 last:border-0">
+                            <div class="flex items-center gap-2">
+                                <span class="text-slate-300">@${m.github_handle || 'user'}</span>
+                                <span class="text-[9px] uppercase ${m.role === 'Lead' ? 'text-blue-400 font-bold' : 'text-slate-400'}">${m.role}</span>
+                            </div>
+                            <div>
+                                ${canTransferToThisUser ? `
+                                    <button onclick="transferLead('${projectId}', '${m.user_id}', '${m.github_handle}')" class="bg-blue-950/80 hover:bg-blue-900 text-blue-400 border border-blue-800/60 text-[10px] px-2.5 py-1 rounded-lg transition-all cursor-pointer">
+                                        Transfer Lead
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             } else {
                 rosterContainer.innerHTML = `<div class="text-slate-500">No members listed.</div>`;
             }
 
             document.getElementById('manage-project-modal').classList.remove('hidden');
+        }
+
+        async function transferLead(projectId, newLeadUserId, newLeadHandle) {
+            if (!confirm(`Are you sure you want to transfer project leadership to @${newLeadHandle}? You will become a Contributor.`)) return;
+
+            if (!currentUserGlobal) return;
+
+            // 1. Update project owner (created_by)
+            const { error: projError } = await _supabase
+                .from('projects')
+                .update({ created_by: newLeadUserId })
+                .eq('id', projectId);
+
+            if (projError) {
+                alert('Error updating project owner: ' + projError.message);
+                return;
+            }
+
+            // 2. Set new lead's role to 'Lead'
+            await _supabase
+                .from('project_members')
+                .update({ role: 'Lead' })
+                .eq('project_id', projectId)
+                .eq('user_id', newLeadUserId);
+
+            // 3. Set current user's role to 'Contributor'
+            await _supabase
+                .from('project_members')
+                .update({ role: 'Contributor' })
+                .eq('project_id', projectId)
+                .eq('user_id', currentUserGlobal.id);
+
+            alert(`Successfully transferred leadership to @${newLeadHandle}!`);
+            closeManageProjectModal();
+            loadUserProjects(currentUserGlobal.id);
         }
 
         async function deleteProject(projectId) {
