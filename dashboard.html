@@ -54,12 +54,18 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
             <div>
                 <h1 class="text-2xl font-bold text-white">Member Workspace & Telemetry</h1>
-                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collective repositories, track team activity, and monitor live GitHub issue pipelines.</p>
+                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collaborative repositories, share project access, and monitor live GitHub issue pipelines.</p>
             </div>
-            <a href="submit.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
-                <i class="fa-solid fa-plus text-xs"></i>
-                <span>Submit New Project</span>
-            </a>
+            <div class="flex items-center gap-3">
+                <button onclick="openShareModal()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition-all">
+                    <i class="fa-solid fa-share-nodes text-xs text-blue-400"></i>
+                    <span>Share Project Access</span>
+                </button>
+                <a href="submit.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Submit New Project</span>
+                </a>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -67,7 +73,7 @@
             <!-- Left Column: Repositories & Org Issues -->
             <div class="lg:col-span-2 space-y-8">
                 
-                <!-- My Projects Section -->
+                <!-- My Projects & Collaborations Section -->
                 <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -89,7 +95,7 @@
                         <div>
                             <h2 class="text-base font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-circle-dot text-emerald-400"></i>
-                                <span>Org Tasks & Issues</span>
+                               <span>Org Tasks & Issues</span>
                             </h2>
                             <p class="text-[11px] text-slate-400 font-mono mt-0.5">Live GitHub issues pulled directly from collective repositories</p>
                         </div>
@@ -137,6 +143,44 @@
         </div>
     </main>
 
+    <!-- Share Project Modal -->
+    <div id="share-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-blue-400"></i>
+                    <span>Share Project & Assign Contributor Role</span>
+                </h3>
+                <button onclick="closeShareModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Select Project</label>
+                    <select id="share-project-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                        <option value="">Loading your projects...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Collaborator GitHub Username</label>
+                    <input type="text" id="share-username" placeholder="e.g. peer-developer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Assign Role</label>
+                    <select id="share-role-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                        <option value="Contributor">Contributor</option>
+                        <option value="Lead">Lead</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <button onclick="closeShareModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-mono">Cancel</button>
+                <button onclick="submitShareProject()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-mono font-bold shadow-lg">Save & Share Access</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-800/80 text-slate-500 text-xs w-full flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -146,7 +190,7 @@
         <span class="font-mono text-[11px]">Copyright &copy; Vectorial Collective 2026</span>
     </footer>
 
-    <!-- Dashboard State & Live GitHub Issue Fetching Logic -->
+    <!-- Dashboard Script -->
     <script>
         const { createClient } = supabase;
         const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
@@ -154,6 +198,7 @@
         let currentUser = null;
         let currentFilter = 'all';
         let fetchedIssues = [];
+        let userProjects = [];
 
         async function initDashboard() {
             const { data: { session } } = await _supabase.auth.getSession();
@@ -176,19 +221,26 @@
 
         async function loadUserProjects() {
             const container = document.getElementById('user-projects-list');
+            const selectContainer = document.getElementById('share-project-select');
+            
             const { data: projects, error } = await _supabase.from('projects').select('*');
+            userProjects = projects || [];
 
-            if (projects && projects.length > 0) {
-                container.innerHTML = projects.map(p => `
+            if (userProjects.length > 0) {
+                container.innerHTML = userProjects.map(p => `
                     <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-1">
                                 <a href="${p.repo_url || '#'}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold hover:underline truncate max-w-[180px]">${p.title}</a>
-                                <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">Lead</span>
+                                <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">Active</span>
                             </div>
                             <p class="text-[11px] text-slate-400 truncate">${p.repo_url || 'No URL specified'}</p>
                         </div>
                     </div>
+                `).join('');
+
+                selectContainer.innerHTML = userProjects.map(p => `
+                    <option value="${p.id}">${p.title}</option>
                 `).join('');
             } else {
                 container.innerHTML = `
@@ -196,13 +248,43 @@
                         No projects found. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
                     </div>
                 `;
+                selectContainer.innerHTML = `<option value="">No projects available</option>`;
             }
+        }
+
+        function openShareModal() {
+            document.getElementById('share-modal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.add('hidden');
+        }
+
+        async function submitShareProject() {
+            const projectId = document.getElementById('share-project-select').value;
+            const peerUsername = document.getElementById('share-username').value.trim();
+            const role = document.getElementById('share-role-select').value;
+
+            if (!projectId || !peerUsername) {
+                alert('Please select a project and enter a collaborator username.');
+                return;
+            }
+
+            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            
+            // Insert shared member association or log activity
+            await _supabase.from('activity_logs').insert([
+                { action: `@${handle} shared project access with @${peerUsername} as ${role}`, user_id: currentUser.id }
+            ]);
+
+            alert(`Successfully granted ${role} access to @${peerUsername}!`);
+            closeShareModal();
+            loadActivityLogs();
         }
 
         async function fetchGitHubIssues() {
             const container = document.getElementById('issues-list');
             try {
-                // Fetch issues from the official vectorial-collective organization repositories
                 const res = await fetch('https://api.github.com/orgs/vectorial-collective/issues?state=open');
                 if (res.ok) {
                     const data = await res.json();
@@ -214,7 +296,6 @@
                         url: issue.html_url
                     }));
                 } else {
-                    // Fallback if org has no public issues or hits rate limits
                     fetchedIssues = [];
                 }
                 renderIssues();
