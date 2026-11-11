@@ -54,13 +54,9 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
             <div>
                 <h1 class="text-2xl font-bold text-white">Member Workspace & Telemetry</h1>
-                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collaborative repositories, share project access, and monitor live GitHub issue pipelines.</p>
+                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collaborative repositories, inspect team roles, and monitor live GitHub issue pipelines.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="openShareModal()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition-all">
-                    <i class="fa-solid fa-share-nodes text-xs text-blue-400"></i>
-                    <span>Share Project Access</span>
-                </button>
+            <div>
                 <a href="submit.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-lg shadow-blue-600/20">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span>Submit New Project</span>
@@ -121,8 +117,26 @@
 
             </div>
 
-            <!-- Right Column: Real-Time Activity Log & Collective Links -->
+            <!-- Right Column: Project Collaborators, Activity Log & Collective Links -->
             <div class="space-y-8">
+                
+                <!-- Project Collaborators List Card -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-users text-sky-400"></i>
+                            <span>Project Collaborators</span>
+                        </h2>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full">Active Roster</span>
+                    </div>
+
+                    <div id="collaborators-list" class="space-y-2.5 max-h-[250px] overflow-y-auto pr-1">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 text-xs font-mono text-slate-500">
+                            Loading collaborators...
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Activity Log -->
                 <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
                     <div class="flex items-center justify-between mb-4">
@@ -133,7 +147,7 @@
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                     </div>
 
-                    <div id="activity-log-list" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+                    <div id="activity-log-list" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                         <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
                             Connecting telemetry...
                         </div>
@@ -155,57 +169,20 @@
                             <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-blue-400"></i>
                         </a>
 
-                        <a href="https://discord.com/invite/7zuhEbVrF" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between bg-slate-950 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 p-3 rounded-xl text-xs font-mono text-slate-200 transition-all group">
+                        <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between bg-slate-950 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 p-3 rounded-xl text-xs font-mono text-slate-200 transition-all group">
                             <div class="flex items-center gap-2.5">
                                 <i class="fa-brands fa-discord text-indigo-400 text-sm"></i>
-                                <span>Vectorial Collective Server</span>
+                                <span>Discord Community (#the-forge)</span>
                             </div>
                             <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-indigo-400"></i>
                         </a>
                     </div>
                 </div>
+
             </div>
 
         </div>
     </main>
-
-    <!-- Share Project Modal -->
-    <div id="share-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-share-nodes text-blue-400"></i>
-                    <span>Share Project & Assign Contributor Role</span>
-                </h3>
-                <button onclick="closeShareModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Select Project</label>
-                    <select id="share-project-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
-                        <option value="">Loading your projects...</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Collaborator GitHub Username</label>
-                    <input type="text" id="share-username" placeholder="e.g. peer-developer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-xs font-mono text-slate-400 mb-1">Assign Role</label>
-                    <select id="share-role-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
-                        <option value="Contributor">Contributor</option>
-                        <option value="Lead">Lead</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
-                <button onclick="closeShareModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-mono">Cancel</button>
-                <button onclick="submitShareProject()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-mono font-bold shadow-lg">Save & Share Access</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-800/80 text-slate-500 text-xs w-full flex items-center justify-between">
@@ -241,14 +218,13 @@
             document.getElementById('user-avatar').src = avatarUrl;
 
             loadUserProjects();
+            loadCollaborators();
             fetchGitHubIssues();
             loadActivityLogs();
         }
 
         async function loadUserProjects() {
             const container = document.getElementById('user-projects-list');
-            const selectContainer = document.getElementById('share-project-select');
-            
             const { data: projects, error } = await _supabase.from('projects').select('*');
             userProjects = projects || [];
 
@@ -264,51 +240,36 @@
                         </div>
                     </div>
                 `).join('');
-
-                selectContainer.innerHTML = userProjects.map(p => `
-                    <option value="${p.id}">${p.title}</option>
-                `).join('');
             } else {
                 container.innerHTML = `
                     <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-400 col-span-2">
                         No projects found. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
                     </div>
                 `;
-                selectContainer.innerHTML = `<option value="">No projects available</option>`;
             }
         }
 
-        function openShareModal() {
-            document.getElementById('share-modal').classList.remove('hidden');
-        }
+        async function loadCollaborators() {
+            const container = document.getElementById('collaborators-list');
+            const { data: shares, error } = await _supabase.from('project_shares').select('*');
 
-        function closeShareModal() {
-            document.getElementById('share-modal').classList.add('hidden');
-        }
-
-        async function submitShareProject() {
-            const projectId = document.getElementById('share-project-select').value;
-            const peerUsername = document.getElementById('share-username').value.trim();
-            const role = document.getElementById('share-role-select').value;
-
-            if (!projectId || !peerUsername) {
-                alert('Please select a project and enter a collaborator username.');
-                return;
+            if (shares && shares.length > 0) {
+                container.innerHTML = shares.map(s => `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield text-blue-400 text-xs"></i>
+                            <span class="text-xs font-mono text-slate-200">@${s.collaborator_handle}</span>
+                        </div>
+                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800/60 px-2 py-0.5 rounded-full">${s.role}</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 text-xs font-mono text-slate-500 text-center">
+                        No collaborators assigned yet.
+                    </div>
+                `;
             }
-
-            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
-            
-            await _supabase.from('project_shares').insert([
-                { project_id: projectId, owner_id: currentUser.id, collaborator_handle: peerUsername, role: role }
-            ]);
-
-            await _supabase.from('activity_logs').insert([
-                { action: `@${handle} shared project access with @${peerUsername} as ${role}`, user_id: currentUser.id }
-            ]);
-
-            alert(`Successfully granted ${role} access to @${peerUsername}!`);
-            closeShareModal();
-            loadActivityLogs();
         }
 
         async function fetchGitHubIssues() {
