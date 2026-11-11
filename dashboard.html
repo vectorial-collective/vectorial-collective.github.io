@@ -223,32 +223,57 @@
             loadActivityLogs();
         }
 
-        async function loadUserProjects() {
-            const container = document.getElementById('user-projects-list');
-            const { data: projects, error } = await _supabase.from('projects').select('*');
-            userProjects = projects || [];
+async function loadUserProjects() {
+    const container = document.getElementById('user-projects-list');
+    const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || '';
 
-            if (userProjects.length > 0) {
-                container.innerHTML = userProjects.map(p => `
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-1">
-                                <a href="${p.repo_url || '#'}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold hover:underline truncate max-w-[180px]">${p.title}</a>
-                                <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">Active</span>
-                            </div>
-                            <p class="text-[11px] text-slate-400 truncate">${p.repo_url || 'No URL specified'}</p>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                container.innerHTML = `
-                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-400 col-span-2">
-                        No projects found. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
-                    </div>
-                `;
-            }
-        }
+    // Fetch projects owned by this user OR shared with their handle
+    const { data: ownedProjects } = await _supabase
+        .from('projects')
+        .select('*')
+        .eq('owner_id', currentUser.id);
 
+    const { data: sharedEntries } = await _supabase
+        .from('project_shares')
+        .select('project_id')
+        .ilike('collaborator_handle', handle);
+
+    let sharedProjectIds = sharedEntries ? sharedEntries.map(s => s.project_id) : [];
+    
+    let sharedProjects = [];
+    if (sharedProjectIds.length > 0) {
+        const { data: sp } = await _supabase
+            .from('projects')
+            .select('*')
+            .in('id', sharedProjectIds);
+        sharedProjects = sp || [];
+    }
+
+    // Combine and deduplicate
+    const combinedMap = new Map();
+    [...(ownedProjects || []), ...sharedProjects].forEach(p => combinedMap.set(p.id, p));
+    userProjects = Array.from(combinedMap.values());
+
+    if (userProjects.length > 0) {
+        container.innerHTML = userProjects.map(p => `
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <a href="${p.repo_url || '#'}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold hover:underline truncate max-w-[180px]">${p.title}</a>
+                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">${p.owner_id === currentUser.id ? 'Owner' : 'Collaborator'}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 truncate">${p.repo_url || 'No URL specified'}</p>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = `
+            <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-400 col-span-2">
+                No projects found for your account. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
+            </div>
+        `;
+    }
+}
         async function loadCollaborators() {
             const container = document.getElementById('collaborators-list');
             const { data: shares, error } = await _supabase.from('project_shares').select('*');
