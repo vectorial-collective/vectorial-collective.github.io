@@ -79,33 +79,65 @@
         </div>
     </footer>
 
-    <script>
-        const { createClient } = supabase;
-        const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
+<script>
+    const { createClient } = supabase;
+    const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
 
-        async function checkSession() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                const actionsContainer = document.getElementById('nav-actions');
-                const signInBtn = actionsContainer.querySelector('button');
-                if (signInBtn) {
-                    const dashboardBtn = document.createElement('a');
-                    dashboardBtn.href = 'dashboard.html';
-                    dashboardBtn.className = 'inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition-all shadow-md';
-                    dashboardBtn.innerHTML = `<i class="fa-solid fa-gauge-high text-xs"></i><span>Dashboard</span>`;
-                    signInBtn.replaceWith(dashboardBtn);
-                }
+    async function loadAllProjects() {
+        const grid = document.getElementById('projects-grid');
+        
+        // Fetch all projects from Supabase
+        const { data: projects, error } = await _supabase
+            .from('projects')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (projects && projects.length > 0) {
+            grid.innerHTML = projects.map(p => `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition-all">
+                    <div>
+                        <a href="${p.repo_url || '#'}" target="_blank" rel="noopener noreferrer" class="font-mono text-sm text-blue-400 font-semibold hover:underline truncate block">${p.title}</a>
+                        <p class="text-xs text-slate-400 mt-2 line-clamp-2">${p.description || 'Computational physics model built and maintained by collective operators.'}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                        <span class="truncate max-w-[180px]">Repo: <span class="text-slate-400">${p.repo_url ? p.repo_url.split('github.com/')[1] : 'External'}</span></span>
+                        <span class="text-emerald-400 font-semibold">Active</span>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            grid.innerHTML = `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center col-span-2 text-xs font-mono text-slate-400">
+                    No active collective projects found in the registry yet.
+                </div>
+            `;
+        }
+    }
+
+    async function checkSession() {
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (session) {
+            const actionsContainer = document.getElementById('nav-actions');
+            const signInBtn = actionsContainer.querySelector('button');
+            if (signInBtn) {
+                const dashboardBtn = document.createElement('a');
+                dashboardBtn.href = 'dashboard.html';
+                dashboardBtn.className = 'inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-1.5 rounded-lg text-xs transition-all shadow-md';
+                dashboardBtn.innerHTML = `<i class="fa-solid fa-gauge-high text-xs"></i><span>Dashboard</span>`;
+                signInBtn.replaceWith(dashboardBtn);
             }
         }
+    }
 
-        async function loginWithGitHub() {
-            await _supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: 'https://vectorial-collective.github.io/dashboard.html' }
-            });
-        }
+    async function loginWithGitHub() {
+        await _supabase.auth.signInWithOAuth({
+            provider: 'github',
+            options: { redirectTo: 'https://vectorial-collective.github.io/dashboard.html' }
+        });
+    }
 
-        checkSession();
-    </script>
+    loadAllProjects();
+    checkSession();
+</script>
 </body>
 </html>
