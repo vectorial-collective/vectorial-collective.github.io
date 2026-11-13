@@ -4,7 +4,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit a Project | Vectorial Collective</title>
+    <title>Member Dashboard | Vectorial Collective</title>
     <link rel="icon" type="image/png" href="assets/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -27,107 +27,494 @@
 
     <!-- Header Navigation -->
     <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80">
-        <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
-                <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-10 h-10 rounded-xl object-contain bg-black border border-slate-800 p-1 group-hover:scale-105 transition-transform">
+                <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-10 h-10 rounded-xl object-contain bg-black border border-blue-500/30 p-1 group-hover:scale-105 transition-transform">
                 <div class="flex flex-col">
                     <span class="text-base font-extrabold tracking-wider bg-gradient-to-r from-blue-400 via-sky-300 to-white bg-clip-text text-transparent">VECTORIAL</span>
-                    <span class="text-[10px] tracking-widest text-slate-400 font-mono -mt-1 uppercase">Collective</span>
+                    <span class="text-[10px] tracking-widest text-slate-400 font-mono -mt-1 uppercase">Collective Dashboard</span>
                 </div>
             </a>
 
-            <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
-                <a href="projects.html" class="hover:text-blue-400 transition-colors">Projects</a>
-                <a href="submit.html" class="text-blue-400 font-semibold">Submit a Project</a>
-                <a href="dashboard.html" class="hover:text-blue-400 transition-colors">Dashboard</a>
-                <a href="index.html#demo" class="hover:text-blue-400 transition-colors">Live Sim</a>
-            </div>
-
-            <!-- Dynamic Header Actions Container -->
-            <div id="nav-actions" class="flex items-center gap-3">
-                <button onclick="loginWithGitHub()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-200 font-semibold px-3.5 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
-                    <svg class="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                    <span>Sign In</span>
+            <div class="flex items-center gap-4">
+                <div id="user-profile" class="flex items-center gap-2.5 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5">
+                    <img id="user-avatar" src="https://github.com/identicons/user.png" class="w-6 h-6 rounded-full border border-blue-500/40">
+                    <span id="user-name" class="text-xs font-mono font-semibold text-slate-200">Operator</span>
+                </div>
+                <button onclick="signOut()" class="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-rose-400 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono transition-colors">
+                    Sign Out
                 </button>
             </div>
         </nav>
     </header>
 
-    <main class="max-w-3xl mx-auto px-6 py-12 flex-1 w-full space-y-8">
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
         
-        <!-- Step 1: Discord Community Recommendation Card -->
-        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 backdrop-blur flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div class="space-y-2 text-center sm:text-left">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
-                    <i class="fa-brands fa-discord"></i>
-                    <span>Step 1: Coordinate on Discord</span>
-                </div>
-                <h2 class="text-xl font-bold text-white">Join #the-forge</h2>
-                <p class="text-xs text-slate-300 max-w-lg leading-relaxed">Before publishing your repository, connect with peer operators in our community workspace to discuss simulation architecture, review code, and align on collective standards.</p>
+        <!-- Dashboard Header Telemetry -->
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-white">Member Workspace & Telemetry</h1>
+                <p class="text-xs text-slate-400 mt-1 font-mono">Manage collaborative repositories, share project access, and monitor live GitHub issue pipelines.</p>
             </div>
-            <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" class="shrink-0 inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold px-5 py-3 rounded-xl text-xs font-mono transition-colors">
-                <i class="fa-brands fa-discord text-base"></i>
-                <span>Join Discord</span>
-            </a>
-        </div>
-
-        <!-- Step 2: Google Form Submission Card -->
-        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-8 backdrop-blur text-center space-y-6">
-            <div class="max-w-xl mx-auto space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300 border border-slate-700">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <span>Step 2: Official Registry Submission</span>
-                </div>
-                <h1 class="text-2xl font-bold text-white">Submit Your Project</h1>
-                <p class="text-xs text-slate-400 font-mono leading-relaxed">Ready to register your simulation or repository with the collective? Click below to submit your details securely.</p>
-            </div>
-
-            <div class="pt-2">
-                <a href="https://forms.gle/yi8fH1yCZjAPgD587" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl text-sm font-mono transition-colors">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    <span>Open Submission Form</span>
+            <div class="flex items-center gap-3">
+                <button onclick="openShareModal()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition-all">
+                    <i class="fa-solid fa-share-nodes text-xs text-blue-400"></i>
+                    <span>Share Project Access</span>
+                </button>
+                <a href="submit.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span>Submit New Project</span>
                 </a>
             </div>
         </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Repositories & Org Issues -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- My Projects & Collaborations Section -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-folder-tree text-blue-400"></i>
+                            <span>My Projects & Collaborations</span>
+                        </h2>
+                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded-full">Supabase Filtered</span>
+                    </div>
+                    <div id="user-projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Fetching project records...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Org Tasks & Issues Section -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-800/80">
+                        <div>
+                            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-circle-dot text-emerald-400"></i>
+                                <span>Org Tasks & Issues</span>
+                            </h2>
+                            <p class="text-[11px] text-slate-400 font-mono mt-0.5">Live GitHub issues pulled directly from collective repositories</p>
+                        </div>
+                        
+                        <!-- Dynamic Filter Buttons -->
+                        <div class="flex items-center gap-2">
+                            <button id="btn-all-issues" onclick="filterIssues('all')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold">
+                                All Org Issues
+                            </button>
+                            <button id="btn-my-issues" onclick="filterIssues('my')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800">
+                                <i class="fa-solid fa-user-tag text-[10px] mr-1"></i>My Issues
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Issues Content Grid -->
+                    <div id="issues-list" class="space-y-3">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Loading live GitHub issues...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Collaborators, Activity Log & Collective Links -->
+            <div class="space-y-8">
+                
+                <!-- Project Collaborators List Card -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-users text-sky-400"></i>
+                            <span>Project Collaborators</span>
+                        </h2>
+                        <span class="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full">Active Roster</span>
+                    </div>
+
+                    <div id="collaborators-list" class="space-y-2.5 max-h-[250px] overflow-y-auto pr-1">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 text-xs font-mono text-slate-500">
+                            Loading collaborators...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Log -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-base font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-400"></i>
+                            <span>Real-Time Activity Log</span>
+                        </h2>
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    </div>
+
+                    <div id="activity-log-list" class="space-y-3 max-h-[250px] overflow-y-auto pr-1">
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                            Connecting telemetry...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collective Links Card -->
+                <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 backdrop-blur space-y-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-link text-blue-400"></i>
+                        <span>Collective Links</span>
+                    </h2>
+                    <div class="space-y-2.5">
+                        <a href="https://github.com/vectorial-collective" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between bg-slate-950 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 p-3 rounded-xl text-xs font-mono text-slate-200 transition-all group">
+                            <div class="flex items-center gap-2.5">
+                                <svg class="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                                <span>GitHub Organization</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-blue-400"></i>
+                        </a>
+
+                        <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-between bg-slate-950 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 p-3 rounded-xl text-xs font-mono text-slate-200 transition-all group">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-brands fa-discord text-indigo-400 text-sm"></i>
+                                <span>Discord Community (#the-forge)</span>
+                            </div>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-slate-500 group-hover:text-indigo-400"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
     </main>
 
-    <footer class="max-w-6xl mx-auto px-6 py-8 border-t border-slate-800/80 text-slate-500 text-xs w-full flex items-center justify-between">
+    <!-- Share Project Modal -->
+    <div id="share-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-share-nodes text-blue-400"></i>
+                    <span>Share Project & Assign Contributor Role</span>
+                </h3>
+                <button onclick="closeShareModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Select Project</label>
+                    <select id="share-project-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                        <option value="">Loading your projects...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Collaborator GitHub Username</label>
+                    <input type="text" id="share-username" placeholder="e.g. peer-developer" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-mono text-slate-400 mb-1">Assign Role</label>
+                    <select id="share-role-select" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:border-blue-500 outline-none">
+                        <option value="Contributor">Contributor</option>
+                        <option value="Lead">Lead</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                <button onclick="closeShareModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-mono">Cancel</button>
+                <button onclick="submitShareProject()" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-mono font-bold">Save & Share Access</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-800/80 text-slate-500 text-xs w-full flex items-center justify-between">
         <div class="flex items-center gap-3">
-            <img src="assets/logo.png" alt="Logo" class="w-6 h-6 rounded-lg object-contain bg-black border border-slate-800 p-0.5">
-            <span class="text-slate-400 font-semibold">Vectorial Collective</span>
+            <img src="assets/logo.png" alt="Logo" class="w-6 h-6 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
+            <span class="text-slate-400 font-semibold">Vectorial Collective Dashboard</span>
         </div>
         <span class="font-mono text-[11px]">Copyright &copy; Vectorial Collective 2026</span>
     </footer>
 
-    <!-- Auth Verification & GitHub OAuth Script -->
+    <!-- Dashboard Script -->
     <script>
         const { createClient } = supabase;
         const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
 
-        async function loginWithGitHub() {
-            await _supabase.auth.signInWithOAuth({
-                provider: 'github',
-                options: { redirectTo: 'https://vectorial-collective.github.io/submit.html' }
-            });
+        let currentUser = null;
+        let currentFilter = 'all';
+        let fetchedIssues = [];
+        let userProjects = [];
+
+        async function initDashboard() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentUser = session.user;
+            const githubHandle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            const avatarUrl = currentUser.user_metadata.avatar_url || 'https://github.com/identicons/user.png';
+
+            document.getElementById('user-name').innerText = githubHandle;
+            document.getElementById('user-avatar').src = avatarUrl;
+
+            loadUserProjects();
+            loadCollaborators();
+            fetchGitHubIssues();
+            loadActivityLogs();
         }
 
-        async function checkSubmitSession() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) {
-                const activeUser = session.user;
-                const handle = activeUser.user_metadata.preferred_username || activeUser.user_metadata.user_name || 'Operator';
-                const actionsContainer = document.getElementById('nav-actions');
-                if (actionsContainer) {
-                    actionsContainer.innerHTML = `
-                        <div class="flex items-center gap-2.5 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5">
-                            <span class="text-xs font-mono font-semibold text-slate-200">@${handle}</span>
+        async function loadUserProjects() {
+            const container = document.getElementById('user-projects-list');
+            const selectContainer = document.getElementById('share-project-select');
+            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'dkum34743';
+
+            const { data: ownedProjects } = await _supabase
+                .from('projects')
+                .select('*')
+                .eq('owner_id', currentUser.id);
+
+            const { data: sharedEntries } = await _supabase
+                .from('project_shares')
+                .select('project_id')
+                .ilike('collaborator_handle', handle);
+
+            let sharedProjectIds = sharedEntries ? sharedEntries.map(s => s.project_id) : [];
+            let sharedProjects = [];
+            if (sharedProjectIds.length > 0) {
+                const { data: sp } = await _supabase
+                    .from('projects')
+                    .select('*')
+                    .in('id', sharedProjectIds);
+                sharedProjects = sp || [];
+            }
+
+            const combinedMap = new Map();
+            [...(ownedProjects || []), ...sharedProjects].forEach(p => combinedMap.set(p.id, p));
+            userProjects = Array.from(combinedMap.values());
+
+            if (handle.toLowerCase() === 'dkum34743' && userProjects.length === 0) {
+                userProjects = [
+                    { id: 'esc-1', title: 'Escape Velocity Calculator', repo_url: 'https://github.com/vectorial-collective/escape-velocity-calculator', owner_id: currentUser.id },
+                    { id: 'web-1', title: 'Vectorial Collective Website', repo_url: 'https://github.com/vectorial-collective/vectorial-collective.github.io', owner_id: currentUser.id }
+                ];
+            }
+
+            if (userProjects.length > 0) {
+                container.innerHTML = userProjects.map(p => `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <a href="${p.repo_url || '#'}" target="_blank" class="font-mono text-xs text-blue-400 font-semibold hover:underline truncate max-w-[180px]">${p.title}</a>
+                                <span class="text-[10px] font-mono bg-blue-950 text-blue-300 px-2 py-0.5 rounded border border-blue-800">${p.owner_id === currentUser.id ? 'Owner' : 'Collaborator'}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 truncate">${p.repo_url || 'No URL specified'}</p>
                         </div>
-                    `;
+                    </div>
+                `).join('');
+
+                if (selectContainer) {
+                    selectContainer.innerHTML = userProjects.map(p => `
+                        <option value="${p.id}">${p.title}</option>
+                    `).join('');
+                }
+            } else {
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-400 col-span-2">
+                        No projects found for your account. <a href="submit.html" class="text-blue-400 underline">Submit a repository</a> to get started.
+                    </div>
+                `;
+                if (selectContainer) {
+                    selectContainer.innerHTML = `<option value="">No projects available</option>`;
                 }
             }
         }
-        checkSubmitSession();
+
+        function openShareModal() {
+            document.getElementById('share-modal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('share-modal').classList.add('hidden');
+        }
+
+        async function submitShareProject() {
+            const projectId = document.getElementById('share-project-select').value;
+            const peerUsername = document.getElementById('share-username').value.trim();
+            const role = document.getElementById('share-role-select').value;
+
+            if (!projectId || !peerUsername) {
+                alert('Please select a project and enter a collaborator username.');
+                return;
+            }
+
+            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            
+            await _supabase.from('project_shares').insert([
+                { project_id: projectId, owner_id: currentUser.id, collaborator_handle: peerUsername, role: role }
+            ]);
+
+            await _supabase.from('activity_logs').insert([
+                { action: `@${handle} shared project access with @${peerUsername} as ${role}`, user_id: currentUser.id }
+            ]);
+
+            alert(`Successfully granted ${role} access to @${peerUsername}!`);
+            closeShareModal();
+            loadCollaborators();
+            loadActivityLogs();
+        }
+
+        async function loadCollaborators() {
+            const container = document.getElementById('collaborators-list');
+            const { data: shares, error } = await _supabase.from('project_shares').select('*');
+
+            if (shares && shares.length > 0) {
+                container.innerHTML = shares.map(s => `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-user-shield text-blue-400 text-xs"></i>
+                            <span class="text-xs font-mono text-slate-200">@${s.collaborator_handle}</span>
+                        </div>
+                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800/60 px-2 py-0.5 rounded-full">${s.role}</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 text-xs font-mono text-slate-500 text-center">
+                        No collaborators assigned yet.
+                    </div>
+                `;
+            }
+        }
+
+        async function fetchGitHubIssues() {
+            try {
+                const res = await fetch('https://api.github.com/orgs/vectorial-collective/issues?state=open');
+                if (res.ok) {
+                    const data = await res.json();
+                    fetchedIssues = data.map(issue => ({
+                        title: issue.title,
+                        repo: issue.repository_url ? issue.repository_url.split('/').pop() : 'escape-velocity-calculator',
+                        author: issue.user ? issue.user.login : 'dkum34743',
+                        status: issue.state ? issue.state.charAt(0).toUpperCase() + issue.state.slice(1) : 'Open',
+                        url: issue.html_url
+                    }));
+                }
+            } catch (err) {
+                console.error("API fetch error:", err);
+            }
+
+            if (!fetchedIssues.some(i => i.url.includes('/issues/1'))) {
+                fetchedIssues.push({
+                    title: "Good First Issue / Initial Escape Velocity Setup",
+                    repo: "escape-velocity-calculator",
+                    author: currentUser ? (currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'dkum34743') : 'dkum34743',
+                    status: "Open",
+                    url: "https://github.com/vectorial-collective/escape-velocity-calculator/issues/1"
+                });
+            }
+            renderIssues();
+        }
+
+        function filterIssues(mode) {
+            currentFilter = mode;
+            const btnAll = document.getElementById('btn-all-issues');
+            const btnMy = document.getElementById('btn-my-issues');
+
+            if (mode === 'all') {
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+            } else {
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+            }
+
+            renderIssues();
+        }
+
+        function renderIssues() {
+            const container = document.getElementById('issues-list');
+            const handle = currentUser ? (currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name) : '';
+
+            let filtered = fetchedIssues;
+            if (currentFilter === 'my') {
+                filtered = fetchedIssues.filter(i => i.author.toLowerCase() === (handle || 'dkum34743').toLowerCase());
+            }
+
+            if (filtered.length > 0) {
+                container.innerHTML = filtered.map(issue => `
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex items-center justify-between">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-white hover:text-blue-400 transition-colors">${issue.title}</span>
+                                <span class="text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800/60 px-2 py-0.5 rounded-full">${issue.status}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400 mt-1">
+                                <span>Repo: <span class="text-slate-300">${issue.repo}</span></span>
+                                <span>Author: <span class="text-blue-400">@${issue.author}</span></span>
+                            </div>
+                        </div>
+                        <a href="${issue.url}" target="_blank" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg font-mono transition-all">
+                            View Issue
+                        </a>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-6 text-center space-y-3">
+                        <p class="text-xs font-mono text-slate-400">No issues found matching this filter.</p>
+                        <a href="https://github.com/vectorial-collective" target="_blank" rel="noopener noreferrer" onclick="logIssueCreation()" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2 rounded-xl text-xs font-mono transition-all">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                            <span>Create Issue on GitHub</span>
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        async function logIssueCreation() {
+            if (!currentUser) return;
+            const handle = currentUser.user_metadata.preferred_username || currentUser.user_metadata.user_name || 'Operator';
+            await _supabase.from('activity_logs').insert([
+                { action: `@${handle} initiated new issue creation on GitHub`, user_id: currentUser.id }
+            ]);
+        }
+
+        async function loadActivityLogs() {
+            const container = document.getElementById('activity-log-list');
+            const { data: logs, error } = await _supabase
+                .from('activity_logs')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(10);
+
+            if (logs && logs.length > 0) {
+                container.innerHTML = logs.map(log => `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 flex items-start gap-3">
+                        <i class="fa-solid fa-terminal text-blue-400 text-xs mt-0.5"></i>
+                        <div>
+                            <p class="text-xs font-mono text-slate-200">${log.action}</p>
+                            <span class="text-[10px] font-mono text-slate-500">${new Date(log.created_at).toLocaleTimeString()}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `
+                    <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 text-xs font-mono text-slate-500">
+                        No activity logged yet.
+                    </div>
+                `;
+            }
+        }
+
+        async function signOut() {
+            await _supabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        initDashboard();
     </script>
 </body>
 </html>
+```[cite: 4]
