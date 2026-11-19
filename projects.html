@@ -84,6 +84,17 @@
     const { createClient } = supabase;
     const _supabase = createClient('https://aqrcbiwsnkgrgjdxbpes.supabase.co', 'sb_publishable_QXW8wZWU9NAJukzkhmoYiQ_GiunATxY');
 
+    function clearAuthStorage() {
+        for (const store of [window.localStorage, window.sessionStorage]) {
+            if (!store) continue;
+            Object.keys(store).forEach((key) => {
+                if (key.startsWith('sb-') || key.includes('supabase')) {
+                    store.removeItem(key);
+                }
+            });
+        }
+    }
+
     async function loadAllProjects() {
         const grid = document.getElementById('projects-grid');
         
@@ -131,13 +142,19 @@
     }
 
     async function loginWithGitHub() {
-        await _supabase.auth.signInWithOAuth({
+        clearAuthStorage();
+        const { data, error } = await _supabase.auth.signInWithOAuth({
             provider: 'github',
             options: {
                 redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
-                queryParams: { prompt: 'login' }
+                queryParams: { prompt: 'login' },
+                skipBrowserRedirect: true
             }
         });
+        if (!error && data?.url) {
+            const sep = data.url.includes('?') ? '&' : '?';
+            window.location.assign(`${data.url}${sep}t=${Date.now()}`);
+        }
     }
 
     async function handleDashboardClick(event) {
