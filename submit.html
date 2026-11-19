@@ -108,7 +108,7 @@
         async function loginWithGitHub() {
             await _supabase.auth.signInWithOAuth({
                 provider: 'github',
-                options: { redirectTo: 'https://vectorial-collective.github.io/submit.html' }
+                options: { redirectTo: 'https://vectorial-collective.github.io/dashboard.html' }
             });
         }
 
