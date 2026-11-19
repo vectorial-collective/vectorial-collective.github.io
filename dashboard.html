@@ -41,7 +41,7 @@
                     <img id="user-avatar" src="https://github.com/identicons/user.png" class="w-6 h-6 rounded-full border border-blue-500/40">
                     <span id="user-name" class="text-xs font-mono font-semibold text-slate-200">Operator</span>
                 </div>
-                <button onclick="signOut()" class="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-rose-400 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono transition-colors">
+                <button onclick="signOut()" class="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-rose-400 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono transition-colors cursor-pointer">
                     Sign Out
                 </button>
             </div>
@@ -57,7 +57,7 @@
                 <p class="text-xs text-slate-400 mt-1 font-mono">Manage collaborative repositories, share project access, and monitor live GitHub issue pipelines.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="openShareModal()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition-all">
+                <button onclick="openShareModal()" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2 rounded-xl text-xs transition-all cursor-pointer">
                     <i class="fa-solid fa-share-nodes text-xs text-blue-400"></i>
                     <span>Share Project Access</span>
                 </button>
@@ -102,10 +102,10 @@
                         
                         <!-- Dynamic Filter Buttons -->
                         <div class="flex items-center gap-2">
-                            <button id="btn-all-issues" onclick="filterIssues('all')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold">
+                            <button id="btn-all-issues" onclick="filterIssues('all')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold cursor-pointer">
                                 All Org Issues
                             </button>
-                            <button id="btn-my-issues" onclick="filterIssues('my')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800">
+                            <button id="btn-my-issues" onclick="filterIssues('my')" class="px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800 cursor-pointer">
                                 <i class="fa-solid fa-user-tag text-[10px] mr-1"></i>My Issues
                             </button>
                         </div>
@@ -245,10 +245,20 @@
         let fetchedIssues = [];
         let userProjects = [];
 
+        async function loginWithGitHub() {
+            await _supabase.auth.signInWithOAuth({
+                provider: 'github',
+                options: {
+                    redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
+                    queryParams: { prompt: 'login' }
+                }
+            });
+        }
+
         async function initDashboard() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session) {
-                window.location.href = 'index.html';
+                await loginWithGitHub();
                 return;
             }
 
@@ -423,11 +433,11 @@
             const btnMy = document.getElementById('btn-my-issues');
 
             if (mode === 'all') {
-                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
-                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold cursor-pointer';
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800 cursor-pointer';
             } else {
-                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold';
-                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800';
+                btnMy.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-blue-600 text-white font-semibold cursor-pointer';
+                btnAll.className = 'px-3 py-1 rounded-lg text-xs font-mono transition-all bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800 cursor-pointer';
             }
 
             renderIssues();
@@ -517,4 +527,7 @@
     </script>
 </body>
 </html>
-```[cite: 4]
+```[cite: 12]
+
+### Note on GitHub Session Behavior
+`queryParams: { prompt: 'login' }` tells GitHub's OAuth endpoint to prompt for authentication rather than automatically reusing a prior OAuth grant, though if you are already signed into `github.com` in your browser, GitHub may still show a quick one-click confirmation/account screen depending on its current OAuth UI behavior.
