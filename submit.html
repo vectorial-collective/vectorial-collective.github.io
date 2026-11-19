@@ -39,7 +39,7 @@
             <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
                 <a href="projects.html" class="hover:text-blue-400 transition-colors">Projects</a>
                 <a href="submit.html" class="text-blue-400 font-semibold">Submit a Project</a>
-                <a href="dashboard.html" class="hover:text-blue-400 transition-colors">Dashboard</a>
+                <a href="dashboard.html" onclick="handleDashboardClick(event)" class="hover:text-blue-400 transition-colors">Dashboard</a>
                 <a href="index.html#demo" class="hover:text-blue-400 transition-colors">Live Sim</a>
             </div>
 
@@ -110,6 +110,16 @@
                 provider: 'github',
                 options: { redirectTo: 'https://vectorial-collective.github.io/submit.html' }
             });
+        }
+
+        async function handleDashboardClick(event) {
+            event.preventDefault();
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                window.location.href = 'dashboard.html';
+            } else {
+                await loginWithGitHub();
+            }
         }
 
         async function checkSubmitSession() {
