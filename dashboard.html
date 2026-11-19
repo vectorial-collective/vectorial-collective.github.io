@@ -245,14 +245,31 @@
         let fetchedIssues = [];
         let userProjects = [];
 
+        function clearAuthStorage() {
+            for (const store of [window.localStorage, window.sessionStorage]) {
+                if (!store) continue;
+                Object.keys(store).forEach((key) => {
+                    if (key.startsWith('sb-') || key.includes('supabase')) {
+                        store.removeItem(key);
+                    }
+                });
+            }
+        }
+
         async function loginWithGitHub() {
-            await _supabase.auth.signInWithOAuth({
+            clearAuthStorage();
+            const { data, error } = await _supabase.auth.signInWithOAuth({
                 provider: 'github',
                 options: {
                     redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
-                    queryParams: { prompt: 'login' }
+                    queryParams: { prompt: 'login' },
+                    skipBrowserRedirect: true
                 }
             });
+            if (!error && data?.url) {
+                const sep = data.url.includes('?') ? '&' : '?';
+                window.location.assign(`${data.url}${sep}t=${Date.now()}`);
+            }
         }
 
         async function initDashboard() {
@@ -519,15 +536,16 @@
         }
 
         async function signOut() {
-            await _supabase.auth.signOut();
-            window.location.href = 'index.html';
+            try {
+                await _supabase.auth.signOut({ scope: 'local' });
+            } catch (_) {
+                // Ignore sign-out network errors and still clear local state
+            }
+            clearAuthStorage();
+            window.location.replace('index.html');
         }
 
         initDashboard();
     </script>
 </body>
 </html>
-```[cite: 12]
-
-### Note on GitHub Session Behavior
-`queryParams: { prompt: 'login' }` tells GitHub's OAuth endpoint to prompt for authentication rather than automatically reusing a prior OAuth grant, though if you are already signed into `github.com` in your browser, GitHub may still show a quick one-click confirmation/account screen depending on its current OAuth UI behavior.
