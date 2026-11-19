@@ -33,6 +33,7 @@
                     <span class="text-[10px] bg-blue-900/75 text-blue-300 border border-blue-700/60 px-1.5 py-0.2 rounded-full font-mono">Live</span>
                 </a>
                 <a href="submit.html" class="hover:text-blue-400 transition-colors">Submit a Project</a>
+                <a href="dashboard.html" onclick="handleDashboardClick(event)" class="hover:text-blue-400 transition-colors">Dashboard</a>
                 <a href="index.html#demo" class="hover:text-blue-400 transition-colors">Live Sim</a>
                 <a href="index.html#benefits" class="hover:text-blue-400 transition-colors">Why Join</a>
             </div>
@@ -55,7 +56,7 @@
         <h1 class="text-3xl font-bold mb-2">Active Collective Projects</h1>
         <p class="text-slate-400 text-sm mb-8">Explore open-source projects and tools published by our operators</p>
         
-        <div id="projects-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
                 <div>
                     <a href="https://github.com/vectorial-collective/escape-velocity-calculator" target="_blank" class="font-mono text-sm text-blue-400 font-semibold hover:underline">escape-velocity-calculator</a>
@@ -132,8 +133,21 @@
     async function loginWithGitHub() {
         await _supabase.auth.signInWithOAuth({
             provider: 'github',
-            options: { redirectTo: 'https://vectorial-collective.github.io/dashboard.html' }
+            options: {
+                redirectTo: 'https://vectorial-collective.github.io/dashboard.html',
+                queryParams: { prompt: 'login' }
+            }
         });
+    }
+
+    async function handleDashboardClick(event) {
+        event.preventDefault();
+        const { data: { session } } = await _supabase.auth.getSession();
+        if (session) {
+            window.location.href = 'dashboard.html';
+        } else {
+            await loginWithGitHub();
+        }
     }
 
     loadAllProjects();
