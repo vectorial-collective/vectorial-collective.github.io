@@ -40,7 +40,6 @@
             background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
         }
-        /* Offset scroll target so sections center nicely in the viewport */
         section[id] {
             scroll-margin-top: 12vh;
         }
@@ -49,7 +48,7 @@
 <body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white min-h-screen relative overflow-x-hidden flex flex-col justify-between">
 
     <!-- Unified Header Navigation -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800/80 transition-all">
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/85 border-b border-slate-800/80">
         <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3 group">
                 <img src="assets/logo.png" alt="Vectorial Collective Logo" class="w-10 h-10 rounded-xl object-contain group-hover:scale-105 transition-transform bg-black border border-blue-500/30 p-1">
@@ -87,33 +86,33 @@
 
     <main class="relative z-10">
         <!-- Hero Section -->
-        <section class="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center">
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-950/70 border border-blue-800/60 text-blue-300 mb-8">
+        <section class="max-w-6xl mx-auto px-6 pt-16 pb-14 border-b border-slate-800/70">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-950/70 border border-blue-800/60 text-blue-300 mb-7">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span>Accepting Student Project Submissions</span>
                 <span class="text-blue-500">|</span>
                 <span class="text-slate-400">100% Open-Source</span>
             </div>
 
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] mb-6 text-white">
-                A Computational Engineering & <br class="hidden sm:block">
+            <h1 class="text-4xl sm:text-6xl lg:text-[4.25rem] font-black tracking-tight leading-[1.08] mb-6 text-white max-w-4xl">
+                A Computational Engineering &amp; <br class="hidden sm:block">
                 <span class="text-white">
                     Physics Collection
                 </span>
             </h1>
 
-            <p class="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-normal">
+            <p class="text-base sm:text-lg text-slate-400 max-w-2xl mb-9 leading-relaxed font-normal">
                 A student-run collective engineering high-performance <span class="text-blue-300 font-semibold">C++</span> and <span class="text-blue-300 font-semibold">Python</span> scripts and tools. From physics calculators and math modeling to rapid software systems, we publish portfolio-grade open-source software under the collective.
             </p>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                 <a href="https://github.com/vectorial-collective" target="_blank" rel="noopener noreferrer" 
-                   class="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-7 py-3 rounded-xl transition-all hover:-translate-y-0.5">
+                   class="w-full sm:w-auto flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold px-6 py-3 rounded-xl transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                     <span>Explore Repositories</span>
                 </a>
                 <a href="#demo" 
-                   class="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold px-7 py-3 rounded-xl transition-all hover:-translate-y-0.5">
+                   class="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-900/90 hover:bg-slate-800 border border-slate-700/80 text-slate-200 font-semibold px-6 py-3 rounded-xl transition-all">
                     <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span>Try In-Browser Simulator</span>
                 </a>
@@ -121,12 +120,12 @@
         </section>
 
         <!-- Live In-Browser Escape Velocity Simulator Section (#demo) -->
-        <section id="demo" class="max-w-5xl mx-auto px-6 py-12">
-            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur">
+        <section id="demo" class="max-w-6xl mx-auto px-6 py-14 border-b border-slate-800/70">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
                     <div>
-                        <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Interactive Calculator Demo</span>
-                        <h2 class="text-xl font-bold text-white mt-1">Escape Velocity & Gravitational Simulator</h2>
+                        <span class="text-xs font-mono text-blue-400">Interactive Calculator Demo</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white mt-0.5">Escape Velocity &amp; Gravitational Simulator</h2>
                     </div>
                     <div class="flex items-center gap-2 font-mono text-xs bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -134,10 +133,8 @@
                     </div>
                 </div>
 
-                <!-- Simulation Grid Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Controls Column -->
-                    <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-5 space-y-4 flex flex-col justify-between">
+                    <div class="bg-slate-950/90 border border-slate-800/80 rounded-xl p-5 space-y-4 flex flex-col justify-between">
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-xs font-mono text-slate-400 mb-1.5">Planetary Mass Preset</label>
@@ -164,15 +161,13 @@
                             </div>
                         </div>
 
-                        <!-- Computed Telemetry Box -->
                         <div class="bg-blue-950/40 border border-blue-800/50 rounded-xl p-4 text-center">
-                            <span class="text-[10px] font-mono text-blue-400 uppercase tracking-widest block mb-1">Calculated Escape Velocity</span>
+                            <span class="text-[10px] font-mono text-blue-400 block mb-1">Calculated Escape Velocity</span>
                             <div id="result-display" class="text-2xl font-black font-mono text-white">11,186 m/s</div>
                             <span id="result-kmh" class="text-[11px] font-mono text-slate-400 mt-1 block">40,268 km/h</span>
                         </div>
                     </div>
 
-                    <!-- Canvas Visualization Column -->
                     <div class="lg:col-span-2 bg-slate-950 rounded-xl border border-slate-800 flex flex-col items-center justify-center relative overflow-hidden p-4 aspect-video">
                         <div class="absolute inset-0 bg-grid-pattern opacity-20"></div>
                         <canvas id="sim-canvas" width="600" height="340" class="w-full h-full object-contain z-10"></canvas>
@@ -185,131 +180,129 @@
             </div>
         </section>
 
-        <!-- Why Join Section (#benefits) -->
-        <section id="benefits" class="max-w-5xl mx-auto px-6 py-16">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Collective Advantages</span>
-                <h2 class="text-3xl font-bold text-white mt-1">Why Build with Vectorial?</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 backdrop-blur">
-                    <div class="w-10 h-10 rounded-xl bg-blue-950 border border-blue-800/60 flex items-center justify-center text-blue-400 mb-4">
-                        <i class="fa-solid fa-code-branch text-base"></i>
-                    </div>
-                    <h3 class="text-base font-bold text-white mb-2">Open-Source Infrastructure</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Collaborate on GitHub with structured pull requests, automated webhooks, and real-time team dashboards.</p>
+        <!-- Why Join Section (#benefits) — Split Editorial Layout -->
+        <section id="benefits" class="max-w-6xl mx-auto px-6 py-16 border-b border-slate-800/70">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                <div class="lg:col-span-4">
+                    <span class="text-xs font-mono text-blue-400">Collective Advantages</span>
+                    <h2 class="text-3xl font-bold text-white mt-1.5">Why Build with Vectorial?</h2>
                 </div>
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 backdrop-blur">
-                    <div class="w-10 h-10 rounded-xl bg-blue-950 border border-blue-800/60 flex items-center justify-center text-blue-400 mb-4">
-                        <i class="fa-solid fa-calculator text-base"></i>
+
+                <div class="lg:col-span-8 divide-y divide-slate-800/80 border-t border-b border-slate-800/80">
+                    <div class="py-5">
+                        <h3 class="text-base font-bold text-white mb-1.5">Open-Source Infrastructure</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Collaborate on GitHub with structured pull requests, automated webhooks, and real-time team dashboards.</p>
                     </div>
-                    <h3 class="text-base font-bold text-white mb-2">Rigorous Physics Scripts</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Focus on high-precision numerical computations, orbital mechanics, trajectory calculations, and engineering formulas.</p>
-                </div>
-                <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-6 backdrop-blur">
-                    <div class="w-10 h-10 rounded-xl bg-blue-950 border border-blue-800/60 flex items-center justify-center text-blue-400 mb-4">
-                        <i class="fa-solid fa-users text-base"></i>
+                    <div class="py-5">
+                        <h3 class="text-base font-bold text-white mb-1.5">Rigorous Physics Scripts</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Focus on high-precision numerical computations, orbital mechanics, trajectory calculations, and engineering formulas.</p>
                     </div>
-                    <h3 class="text-base font-bold text-white mb-2">Student-Led Community</h3>
-                    <p class="text-xs text-slate-400 leading-relaxed">Connect with passionate peers in #the-forge on Discord to share code snippets, architectural designs, and research.</p>
+                    <div class="py-5">
+                        <h3 class="text-base font-bold text-white mb-1.5">Student-Led Community</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Connect with passionate peers in #the-forge on Discord to share code snippets, architectural designs, and research.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- How It Works Section (#workflow) -->
-        <section id="workflow" class="max-w-5xl mx-auto px-6 py-16">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Workflow Pipeline</span>
+        <section id="workflow" class="max-w-6xl mx-auto px-6 py-16 border-b border-slate-800/70">
+            <div class="mb-10">
+                <span class="text-xs font-mono text-blue-400">Workflow Pipeline</span>
                 <h2 class="text-3xl font-bold text-white mt-1">How It Works</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Step 01: Join the Discord -->
-                <div class="bg-slate-900/30 border border-slate-800/60 rounded-xl p-6 relative flex flex-col justify-between">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6 flex flex-col justify-between">
                     <div>
-                        <span class="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono">01</span>
-                        <h3 class="text-sm font-bold text-white mb-2 relative z-10">Join the Discord</h3>
-                        <p class="text-xs text-slate-400 relative z-10 mb-6">Connect with peers and maintainers in #the-forge to coordinate project architecture and review standards.</p>
+                        <span class="text-xs font-mono font-bold text-blue-400 block mb-2">01</span>
+                        <h3 class="text-base font-bold text-white mb-2">Join the Discord</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5">Connect with peers and maintainers in #the-forge to coordinate project architecture and review standards.</p>
                     </div>
-                    <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="background-color: #5865F2;" class="relative z-10 inline-flex items-center justify-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all hover:opacity-90">
-                        <i class="fa-brands fa-discord text-white text-sm"></i>
-                        <span>Join Discord</span>
-                    </a>
+                    <div>
+                        <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" style="background-color: #5865F2;" class="inline-flex items-center justify-center gap-2 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all hover:opacity-90">
+                            <i class="fa-brands fa-discord text-white text-sm"></i>
+                            <span>Join Discord</span>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Step 02: Sign In with GitHub -->
-                <div class="bg-slate-900/30 border border-slate-800/60 rounded-xl p-6 relative flex flex-col justify-between">
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6 flex flex-col justify-between">
                     <div>
-                        <span class="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono">02</span>
-                        <h3 class="text-sm font-bold text-white mb-2 relative z-10">Sign In with GitHub</h3>
-                        <p class="text-xs text-slate-400 relative z-10 mb-6">Authenticate instantly using your GitHub credentials to initialize your operator profile.</p>
+                        <span class="text-xs font-mono font-bold text-blue-400 block mb-2">02</span>
+                        <h3 class="text-base font-bold text-white mb-2">Sign In with GitHub</h3>
+                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed mb-5">Authenticate instantly using your GitHub credentials to initialize your operator profile.</p>
                     </div>
-                    <button onclick="loginWithGitHub()" class="relative z-10 inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
-                        <svg class="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                        <span>Sign In with GitHub</span>
-                    </button>
+                    <div>
+                        <button onclick="loginWithGitHub()" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-bold px-4 py-2.5 rounded-xl text-xs transition-all cursor-pointer">
+                            <svg class="w-4 h-4 fill-current text-blue-400" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            <span>Sign In with GitHub</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="bg-slate-900/30 border border-slate-800/60 rounded-xl p-6 relative">
-                    <span class="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono">03</span>
-                    <h3 class="text-sm font-bold text-white mb-2 relative z-10">Create or Join Projects</h3>
-                    <p class="text-xs text-slate-400 relative z-10">Start your own repositories or join active team projects via secure contribution share links.</p>
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6">
+                    <span class="text-xs font-mono font-bold text-blue-400 block mb-2">03</span>
+                    <h3 class="text-base font-bold text-white mb-2">Create or Join Projects</h3>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Start your own repositories or join active team projects via secure contribution share links.</p>
                 </div>
-                <div class="bg-slate-900/30 border border-slate-800/60 rounded-xl p-6 relative">
-                    <span class="text-4xl font-black text-slate-800 absolute top-4 right-4 font-mono">04</span>
-                    <h3 class="text-sm font-bold text-white mb-2 relative z-10">Sync & Deploy</h3>
-                    <p class="text-xs text-slate-400 relative z-10">Push commits, track activity telemetry in your member dashboard, and publish open-source software.</p>
+
+                <div class="bg-slate-900/40 border border-slate-800/80 rounded-xl p-6">
+                    <span class="text-xs font-mono font-bold text-blue-400 block mb-2">04</span>
+                    <h3 class="text-base font-bold text-white mb-2">Sync &amp; Deploy</h3>
+                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">Push commits, track activity telemetry in your member dashboard, and publish open-source software.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Meet the Founder Section (#leadership) -->
-        <section id="leadership" class="max-w-5xl mx-auto px-6 pt-16 pb-8">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="text-xs font-mono text-blue-400 uppercase tracking-widest">Leadership & Vision</span>
-                <h2 class="text-3xl font-bold text-white mt-1">Meet the Founder</h2>
-            </div>
-            <div class="bg-slate-900/30 border border-slate-800/60 rounded-2xl p-6 sm:p-8 backdrop-blur flex flex-col md:flex-row items-center gap-6">
-                <img src="assets/IMG_8027.jpg" alt="Divyansh Kumar" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover border border-blue-500/30 shrink-0 shadow-md">
-                <div class="space-y-2 text-center md:text-left">
-                    <div class="flex flex-col md:flex-row items-center gap-2">
-                        <h3 class="text-lg font-bold text-white">Divyansh Kumar</h3>
-                        <span class="text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800/60 px-2.5 py-0.5 rounded-full">Founder & Lead Architect</span>
+        <!-- Leadership & Mission Combined Asymmetric Section (#leadership) -->
+        <section id="leadership" class="max-w-6xl mx-auto px-6 py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+                <!-- Left Column: Founder -->
+                <div class="lg:col-span-5 space-y-5">
+                    <div>
+                        <span class="text-xs font-mono text-blue-400">Leadership &amp; Vision</span>
+                        <h2 class="text-3xl font-bold text-white mt-1">Meet the Founder</h2>
                     </div>
-                    <p class="text-xs text-slate-400 leading-relaxed">
-                        A high school junior passionate about computational physics, simulation mechanics, and open-source software systems. Vectorial Collective was founded to build rigorous, high-precision tools and provide student developers a platform to publish portfolio-grade software.
-                    </p>
-                    <div class="pt-2 flex items-center justify-center md:justify-start gap-4">
-                        <a href="https://github.com/dkum34743" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-blue-400 hover:underline flex items-center gap-1.5">
+
+                    <div class="bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+                        <div class="flex items-center gap-4">
+                            <img src="assets/IMG_8027.jpg" alt="Divyansh Kumar" class="w-16 h-16 rounded-xl object-cover border border-blue-500/30 shrink-0">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Divyansh Kumar</h3>
+                                <span class="text-xs font-mono text-blue-300 block">Founder &amp; Lead Architect</span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                            A high school junior passionate about computational physics, simulation mechanics, and open-source software systems. Vectorial Collective was founded to build rigorous, high-precision tools and provide student developers a platform to publish portfolio-grade software.
+                        </p>
+
+                        <a href="https://github.com/dkum34743" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-blue-400 hover:underline inline-flex items-center gap-1.5">
                             <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
                             <span>@dkum34743</span>
                         </a>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Our Mission Section -->
-        <section class="max-w-5xl mx-auto px-6 pt-8 pb-16">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <h2 class="text-3xl font-bold text-white mt-1">Our Mission</h2>
-            </div>
-            <div class="bg-slate-900/30 border border-slate-800/60 rounded-2xl p-6 sm:p-8 backdrop-blur flex flex-col items-center gap-6">
-                <div class="space-y-4 text-center max-w-2xl">
-                    <h3 class="text-lg font-bold text-white">Provide Recognition and Growth for All</h3>
+                <!-- Right Column: Mission -->
+                <div class="lg:col-span-7 space-y-5 lg:pl-6 lg:border-l lg:border-slate-800/80">
+                    <h2 class="text-3xl font-bold text-white">Our Mission</h2>
+                    <h3 class="text-lg font-bold text-slate-200">Provide Recognition and Growth for All</h3>
+
                     <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
                         Vectorial Collective was founded by Divy for one reason: he could not find anywhere where he could display his work and develop his programming skills—so he built Vectorial Collective himself. It is an open-source collective that allows developers of all skill levels to display their physics-and STEM-related works while receiving feedback and polishing their skills.
                     </p>
-                    <div class="bg-blue-950/50 border border-blue-500/30 rounded-xl p-4 text-xs text-blue-200 font-medium leading-relaxed shadow-inner">
-                        <i class="fa-solid fa-quote-left text-blue-400 mr-1.5 opacity-70"></i>
-                        Vectorial Collective's goal can be simplified into a single statement: <span class="text-white font-semibold underline decoration-blue-500/60 underline-offset-4">to allow scientists of all backgrounds and skill levels to receive recognition for their work while also providing open-source tools that can be used by any STEM enthusiast around the world.</span>
-                        <i class="fa-solid fa-quote-right text-blue-400 ml-1.5 opacity-70"></i>
-                    </div>
+
+                    <blockquote class="border-l-2 border-blue-500 pl-4 py-1 text-sm text-blue-200 leading-relaxed">
+                        Vectorial Collective's goal can be simplified into a single statement: <span class="text-white font-semibold">to allow scientists of all backgrounds and skill levels to receive recognition for their work while also providing open-source tools that can be used by any STEM enthusiast around the world.</span>
+                    </blockquote>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="max-w-6xl mx-auto px-6 py-12 border-t border-slate-800/80 text-slate-500 text-xs w-full">
+    <footer class="max-w-6xl mx-auto px-6 py-10 border-t border-slate-800/80 text-slate-500 text-xs w-full">
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3">
                 <img src="assets/logo.png" alt="Logo" class="w-7 h-7 rounded-lg object-contain bg-black border border-blue-500/30 p-0.5">
